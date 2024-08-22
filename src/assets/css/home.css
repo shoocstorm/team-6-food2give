@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     height: 100vh;
-    background-color: #e0f7fa;
+    background-color: #fff;
 }
 
 .home-title {

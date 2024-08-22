@@ -4,13 +4,9 @@ import Header from '../parts/Header'; // Import Header component
 import '../assets/css/home.css';
 
 const Home: React.FC = () => {
-  const handleLoginClick = () => {
-    console.log('Login button clicked');
-  };
-
   return (
     <>
-      <Header title="Food Hero" onButtonClick={handleLoginClick} />
+      <Header title="Food Hero" />
       <Box className="home-container">
         <Typography variant="h3" className="home-title">
           Welcome to Food Hero

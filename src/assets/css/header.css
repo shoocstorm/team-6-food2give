@@ -1,6 +1,5 @@
 .header-appbar {
     background-color: #00796b;
-    /* Same green as the Home button */
 }
 
 .header-toolbar {
@@ -12,11 +11,12 @@
     font-weight: bold;
 }
 
-.header-button {
-    color: white;
-    font-weight: bold;
+.header-menu-icon {
+    display: none;
 }
 
-.header-button:hover {
-    background-color: #004d40;
+@media (max-width: 600px) {
+    .header-menu-icon {
+        display: block;
+    }
 }
