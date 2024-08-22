@@ -1,0 +1,22 @@
+.header-appbar {
+    background-color: #00796b;
+    /* Same green as the Home button */
+}
+
+.header-toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-title {
+    font-weight: bold;
+}
+
+.header-button {
+    color: white;
+    font-weight: bold;
+}
+
+.header-button:hover {
+    background-color: #004d40;
+}
