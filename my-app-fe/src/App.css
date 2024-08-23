@@ -3,6 +3,19 @@
   background-color: #121212;
 }
 
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #77dd77;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: gray;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
