@@ -5,6 +5,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./App.css";
+import VolunteerPage from "./pages/VolunteerPage";
+import Layout from "./layouts/Layout";
 
 function App() {
   const theme = createTheme({
@@ -58,11 +60,17 @@ function App() {
         <div className="App">
           <Router>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/donor"
-                element={<DonorPage donorId="Bread Talk" />}
-              />
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/donor"
+                  element={<DonorPage donorId="Bread Talk" />}
+                />
+                <Route
+                  path="/volunteer"
+                  element={<VolunteerPage volunteerId="Bob" />}
+                />
+              </Route>
             </Routes>
           </Router>
         </div>
