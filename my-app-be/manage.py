@@ -1,17 +1,10 @@
-<<<<<<< HEAD
 import os
 import logging
 from flask import Flask, request, jsonify
 
-=======
-import logging
-from flask import Flask, request, jsonify
-import os
->>>>>>> bd78909a730297a3d5a22b04d4613a5a04b60838
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
-import base64
+from firebase_admin import credentials, auth, db
+import datetime
 from dotenv import load_dotenv  
 
 # Initialize Flask server
@@ -84,11 +77,70 @@ def handle_scheduled_task():
     # Your scheduled task logic goes here
     return 'Task processed successfully', 200
 
+@server.route('/add-food', methods=['POST'])
+def add_food_posting():
+    try:
+        data = request.get_json()
+        required_fields = ['name', 'numOfMeals', 'preparedAt', 'consumeBy', 'recurring', 'selectedDays']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+        prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
+        ref = db.reference(f'food_postings/{prepared_at_date}')
+        new_post_ref = ref.push(data)
+        post_id = new_post_ref.key
+        logging.info(f'Food posting added successfully with ID: {post_id}')
+        return jsonify({"message": "Food posting added successfully", "id": post_id}), 201
+    except Exception as e:
+        logging.error(f"Failed to add food posting: {e}")
+        return jsonify({"error": str(e)}), 500
 
+@server.route('/get-food', methods=['GET'])
+def get_food_postings():
+    try:
+        ref = db.reference('food_postings')
+        food_postings = ref.get()
+        if not food_postings:
+            food_postings = {}
+        logging.info('Food postings retrieved successfully.')
+        return jsonify(food_postings), 200
+    except Exception as e:
+        logging.error(f"Failed to retrieve food postings: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@server.route('/register', methods=['POST'])
+def register_user():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        roles = data.get('roles')  # An array of roles (e.g., ['Donor', 'Volunteer'])
+
+        if not email or not password or not roles or not isinstance(roles, list):
+            return jsonify({"error": "Missing email, password, or roles (roles must be an array)"}), 400
+
+        # Create user with Firebase Admin SDK
+        user = auth.create_user(
+            email=email,
+            password=password,
+        )
+
+        # Store user roles in Firebase Realtime Database
+        user_ref = db.reference(f'users/{user.uid}')
+        user_ref.set({
+            'email': email,
+            'roles': roles,
+            'createdAt': datetime.datetime.now().isoformat()
+        })
+
+        logging.info('User registered successfully with roles.')
+        return jsonify({"message": "User registered successfully", "userId": user.uid}), 201
+    except Exception as e:
+        logging.error(f"Failed to register user: {e}")
+        return jsonify({"error": str(e)}), 500
+    
 # Start the server
 if __name__ == "__main__":
-<<<<<<< HEAD
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
-=======
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
->>>>>>> bd78909a730297a3d5a22b04d4613a5a04b60838
+
+
