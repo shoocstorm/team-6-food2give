@@ -5,7 +5,8 @@ from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, auth, db
 import datetime
-from dotenv import load_dotenv  
+from dotenv import load_dotenv
+import requests  
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -137,6 +138,48 @@ def register_user():
         return jsonify({"message": "User registered successfully", "userId": user.uid}), 201
     except Exception as e:
         logging.error(f"Failed to register user: {e}")
+        return jsonify({"error": str(e)}), 500
+
+FIREBASE_WEB_API_KEY = "AIzaSyAKjQ4TskNarrno0RMdU3w7G_MhyN5f8Rg" #os.getenv('FIREBASE_WEB_API_KEY')
+
+@server.route('/login', methods=['POST'])
+def login_user():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            return jsonify({"error": "Missing email or password"}), 400
+
+        # Firebase REST API URL for email/password sign-in
+        url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_WEB_API_KEY}"
+
+        # Data for the request
+        payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
+
+        # Make a POST request to the Firebase Auth REST API
+        response = requests.post(url, json=payload)
+        response_data = response.json()
+
+        # Check for errors in the response
+        if 'error' in response_data:
+            return jsonify({"error": response_data['error']['message']}), 400
+
+        # Return user information and ID token
+        return jsonify({
+            "message": "Login successful",
+            "idToken": response_data['idToken'],
+            "refreshToken": response_data['refreshToken'],
+            "expiresIn": response_data['expiresIn'],
+            "userId": response_data['localId']
+        }), 200
+    except Exception as e:
+        logging.error(f"Failed to log in user: {e}")
         return jsonify({"error": str(e)}), 500
     
 # Start the server
