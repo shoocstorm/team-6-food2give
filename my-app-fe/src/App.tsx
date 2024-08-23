@@ -5,6 +5,9 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./App.css";
+import HelpPage from './pages/HelpPage'; 
+
+
 
 function App() {
   const theme = createTheme({
@@ -63,6 +66,7 @@ function App() {
                 path="/donor"
                 element={<DonorPage donorId="Bread Talk" />}
               />
+              <Route path="/help" element={<HelpPage />} />
             </Routes>
           </Router>
         </div>
