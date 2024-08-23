@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { Dayjs } from "dayjs";
 import AddFoodPostingForm from "../forms/AddFoodPostingForm";
 import AddFoodTNCForm from "../forms/AddFoodTNCForm";
-import FoodPostingView from "./FoodPostingView";
-// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import FoodPostingView, { FoodPostingViewMode } from "./FoodPostingView";
 
 export interface AddFoodPostingModalProps {
   donorId: string;
@@ -23,6 +20,7 @@ export const DEFAULT_FOOD_POSTING_FORM_VALUES = {
   consumeBy: null,
   recurring: false,
   selectedDays: [],
+  numOfMeals: 0,
 };
 
 export interface FoodPostingForm {
@@ -34,6 +32,7 @@ export interface FoodPostingForm {
   consumeBy: Dayjs | null;
   recurring: boolean;
   selectedDays: string[];
+  numOfMeals: number;
 }
 
 export enum AddFoodPostingFormStage {
@@ -70,29 +69,45 @@ const AddFoodPostingModal: React.FC<AddFoodPostingModalProps> = ({
       }}
       className="m-4 overflow-scroll"
     >
-      {stage === AddFoodPostingFormStage.DETAILS ? (
-        <AddFoodPostingForm
-          formState={formState}
-          onClose={onClose}
-          setFormState={setFormState}
-          resetFormState={resetFormState}
-          handleNext={() => setStage(AddFoodPostingFormStage.TNC)}
-        />
-      ) : stage === AddFoodPostingFormStage.TNC ? (
-        <AddFoodTNCForm
-          prompts={["test1", "test2"]}
-          handleNext={() => setStage(AddFoodPostingFormStage.VERIFY)}
-          onClose={onClose}
-          resetFormState={resetFormState}
-        />
-      ) : (
-        <FoodPostingView
-          formState={formState}
-          handleNext={() => {}}
-          onClose={onClose}
-          resetFormState={resetFormState}
-        />
-      )}
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 400,
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 2,
+          border: "1px solid #77dd77",
+        }}
+      >
+        {stage === AddFoodPostingFormStage.DETAILS ? (
+          <AddFoodPostingForm
+            formState={formState}
+            onClose={onClose}
+            setFormState={setFormState}
+            resetFormState={resetFormState}
+            handleNext={() => setStage(AddFoodPostingFormStage.TNC)}
+          />
+        ) : stage === AddFoodPostingFormStage.TNC ? (
+          <AddFoodTNCForm
+            prompts={["test1", "test2"]}
+            handleNext={() => setStage(AddFoodPostingFormStage.VERIFY)}
+            onClose={onClose}
+            resetFormState={resetFormState}
+          />
+        ) : (
+          <FoodPostingView
+            formState={formState}
+            handleNext={() => {}}
+            onClose={onClose}
+            resetFormState={resetFormState}
+            viewMode={FoodPostingViewMode.FORM}
+          />
+        )}
+      </Box>
     </Modal>
   );
 };

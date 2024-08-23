@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import os
 import logging
 from flask import Flask, request, jsonify
 
+=======
+import logging
+from flask import Flask, request, jsonify
+import os
+>>>>>>> bd78909a730297a3d5a22b04d4613a5a04b60838
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -81,4 +87,8 @@ def handle_scheduled_task():
 
 # Start the server
 if __name__ == "__main__":
+<<<<<<< HEAD
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+=======
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+>>>>>>> bd78909a730297a3d5a22b04d4613a5a04b60838

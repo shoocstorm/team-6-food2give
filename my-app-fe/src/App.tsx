@@ -5,6 +5,13 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./App.css";
+import HelpPage from './pages/HelpPage'; 
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+
+
 
 function App() {
   const theme = createTheme({
@@ -52,6 +59,12 @@ function App() {
       },
     },
   });
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  dayjs.tz.setDefault("Asia/Singapore");
+
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -63,6 +76,7 @@ function App() {
                 path="/donor"
                 element={<DonorPage donorId="Bread Talk" />}
               />
+              <Route path="/help" element={<HelpPage />} />
             </Routes>
           </Router>
         </div>
