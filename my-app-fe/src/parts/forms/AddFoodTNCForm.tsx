@@ -1,6 +1,5 @@
 import { CloseOutlined, Error } from "@mui/icons-material";
 import {
-  Box,
   Typography,
   IconButton,
   Button,
@@ -14,6 +13,7 @@ export interface AddFoodTNCFormProps {
   handleNext: () => void;
   onClose: () => void;
   resetFormState: () => void;
+  submitButtonText: string;
 }
 
 const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
@@ -21,6 +21,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
   handleNext,
   onClose,
   resetFormState,
+  submitButtonText,
 }: AddFoodTNCFormProps) => {
   const [ticks, setTicks] = useState<boolean[]>(
     Array(prompts.length).fill(false)
@@ -56,7 +57,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
         </IconButton>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-3">
         {prompts.map((prompt: string, idx: number) => (
           <FormControlLabel
             control={
@@ -90,7 +91,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
         onClick={handleSubmit}
         sx={{ marginTop: "10px" }}
       >
-        Review Post
+        {submitButtonText}
       </Button>
     </>
   );
