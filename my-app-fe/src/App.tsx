@@ -13,10 +13,32 @@ import timezone from "dayjs/plugin/timezone";
 
 
 
+// extending the Palette interface to include a custom color green in the theme
+declare module '@mui/material/styles' {
+  interface Palette {
+    green: {
+      "100": string;
+      "200": string;
+      "300": string;
+      "400": string;
+      "500": string;
+    };
+  }
+  interface PaletteOptions {
+    green?: {
+      "100"?: string;
+      "200"?: string;
+      "300"?: string;
+      "400"?: string;
+      "500"?: string;
+    };
+  }
+}
+
 function App() {
   const theme = createTheme({
     typography: {
-      fontFamily: "Montserrat",
+      fontFamily: ["Montserrat","Roboto","Arial","sans-serif"].join(","),
       allVariants: {
         color: "#ffffff",
       },
@@ -36,6 +58,13 @@ function App() {
       text: {
         primary: "#ffffff",
         secondary: "#b0b0b0",
+      },
+      green: {  // Add custom color here
+        "100": "#eafaf4",
+        "200":"#90CFB8",
+        "300":"#57A588",
+        "400":"#2C7A5E",
+        "500":"#0F5038"
       },
     },
     components: {

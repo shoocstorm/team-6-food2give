@@ -24,13 +24,15 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <Box>
       <AppBar position="static" className="header-appbar">
-        <Toolbar className="header-toolbar">
+        <Toolbar 
+          className="header-toolbar"
+          sx={{backgroundColor: 'green.400'}}
+        >
           <Typography variant="h6" className="header-title">
             {title}
           </Typography>
           <IconButton
             edge="end"
-            color="inherit"
             aria-label="menu"
             onClick={handleDrawerToggle}
             className="header-menu-icon"
