@@ -43,20 +43,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
   }, [isError, ticks]);
 
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 2,
-        border: "1px solid #77dd77",
-      }}
-    >
+    <>
       <div className="flex flex-row justify-between items-center">
         <Typography variant="h6">Check terms and conditions</Typography>
         <IconButton
@@ -105,7 +92,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
       >
         Review Post
       </Button>
-    </Box>
+    </>
   );
 };
 
