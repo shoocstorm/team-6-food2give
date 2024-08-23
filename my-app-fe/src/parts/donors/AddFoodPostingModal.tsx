@@ -97,11 +97,14 @@ const AddFoodPostingModal: React.FC<AddFoodPostingModalProps> = ({
             handleNext={() => setStage(AddFoodPostingFormStage.VERIFY)}
             onClose={onClose}
             resetFormState={resetFormState}
+            submitButtonText="Review Post"
           />
         ) : (
           <FoodPostingView
             formState={formState}
-            handleNext={() => {}}
+            handleNext={() => {
+              console.log(formState);
+            }}
             onClose={onClose}
             resetFormState={resetFormState}
             viewMode={FoodPostingViewMode.FORM}

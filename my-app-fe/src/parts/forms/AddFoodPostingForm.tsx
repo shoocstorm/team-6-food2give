@@ -19,6 +19,7 @@ import {
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { FoodPostingForm } from "../donors/AddFoodPostingModal";
+import { ChangeEvent } from "react";
 
 export interface AddFoodPostingFormProps {
   formState: FoodPostingForm;
@@ -121,6 +122,15 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
         value={formState.numOfMeals}
         fullWidth
         margin="normal"
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setFormState((form) => ({
+            ...form,
+            numOfMeals:
+              parseInt(e.target.value) >= 0
+                ? parseInt(e.target.value)
+                : form.numOfMeals,
+          }))
+        }
       />
       <DateTimePicker
         label="Prepared At"
