@@ -5,6 +5,9 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./App.css";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 function App() {
   const theme = createTheme({
@@ -52,6 +55,12 @@ function App() {
       },
     },
   });
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  dayjs.tz.setDefault("Asia/Singapore");
+
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

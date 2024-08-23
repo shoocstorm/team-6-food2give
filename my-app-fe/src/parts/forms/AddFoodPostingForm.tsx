@@ -73,20 +73,7 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 2,
-        border: "1px solid #77dd77",
-      }}
-    >
+    <>
       <div className="flex flex-row justify-between items-center">
         <Typography variant="h6">Add Food Posting</Typography>
         <IconButton
@@ -127,6 +114,13 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
         onChange={(e) =>
           setFormState((form) => ({ ...form, name: e.target.value }))
         }
+      />
+      <TextField
+        type="number"
+        label="Number of Meals"
+        value={formState.numOfMeals}
+        fullWidth
+        margin="normal"
       />
       <DateTimePicker
         label="Prepared At"
@@ -216,7 +210,7 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
       >
         Next
       </Button>
-    </Box>
+    </>
   );
 };
 
