@@ -104,7 +104,8 @@ const AddFoodPostingModal: React.FC<AddFoodPostingModalProps> = ({
           <FoodPostingView
             formState={formState}
             handleNext={async () => {
-              addFoodPosting(donorId, formState);
+              await addFoodPosting(donorId, formState);
+              onClose();
             }}
             onClose={onClose}
             resetFormState={resetFormState}
