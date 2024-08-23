@@ -8,8 +8,13 @@ import datetime
 from dotenv import load_dotenv
 import requests  
 
+import telebot
+from telebot import types
 # Initialize Flask server
 server = Flask(__name__)
+
+TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
+bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
 
 # Load the .env file
 load_dotenv()
@@ -24,59 +29,7 @@ firebase_admin.initialize_app(cred, {
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-# Define a simple route for the root URL
-@server.route("/")
-def index():
-    return "Hello! The server is running.", 200
-
-
-# Route to set data in Firebase Realtime Database
-@server.route('/set-data', methods=['POST'])
-def set_data():
-    try:
-        # Sample data to be set in Firebase
-        data = {
-            'name': 'Jane Doe',
-            'age': 28,
-            'city': 'Singapore'
-        }
-        
-        # Reference to the database location (node)
-        ref = db.reference('users/user1')
-        
-        # Set data in Firebase
-        ref.set(data)
-        
-        logging.info('Data has been set successfully.')
-        return jsonify({"message": "Data set successfully"}), 200
-    except Exception as e:
-        logging.error(f"Failed to set data: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
-# Route to get data from Firebase Realtime Database
-@server.route('/get-data', methods=['GET'])
-def get_data():
-    try:
-        # Reference to the database location (node)
-        ref = db.reference('users/user1')
-        
-        # Get data from Firebase
-        data = ref.get()
-        
-        logging.info('Data retrieved successfully.')
-        return jsonify(data), 200
-    except Exception as e:
-        logging.error(f"Failed to get data: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
-@server.route('/scheduled-task', methods=['POST'])
-def handle_scheduled_task():
-    logging.info('Received scheduled task.')
-    # Your scheduled task logic goes here
-    return 'Task processed successfully', 200
+logger = logging.getLogger(__name__)
 
 @server.route('/add-food', methods=['POST'])
 def add_food_posting():
@@ -182,6 +135,33 @@ def login_user():
         logging.error(f"Failed to log in user: {e}")
         return jsonify({"error": str(e)}), 500
     
+# BOT STUFF
+@bot.message_handler(commands=['register'])
+def register_user(message):
+    chat_id = str(message.chat.id)
+    msg = bot.reply_to(message, "Please enter your email address:")
+    bot.register_next_step_handler(msg, process_email_step)
+
+def process_email_step(message):
+    email = message.text.lower()
+    ref = db.reference()
+    chat_id = str(message.chat.id)
+    email_ref = ref.child('emails').child(email)
+    email_ref.set(chat_id)
+    
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    server_uri = os.getenv("DEV_SERVER") + TELEGRAM_API_TOKEN
+    bot.set_webhook(url=server_uri)
+    return "!", 200
+
+@server.route('/' + TELEGRAM_API_TOKEN, methods=['POST'])
+def getMessage():
+    logger.info('Received new message from Telegram')
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
+
 # Start the server
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
