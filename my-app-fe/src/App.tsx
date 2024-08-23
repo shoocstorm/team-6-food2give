@@ -12,6 +12,7 @@ import timezone from "dayjs/plugin/timezone";
 
 
 
+
 function App() {
   const theme = createTheme({
     typography: {
@@ -58,6 +59,12 @@ function App() {
       },
     },
   });
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  dayjs.tz.setDefault("Asia/Singapore");
+
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
