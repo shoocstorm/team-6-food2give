@@ -19,6 +19,7 @@ export enum FoodPostingViewMode {
 export type FoodPostingViewModel = FoodPostingForm & {
   numMealsTaken?: number;
   requests?: BeneficiaryOrderRequestCardProps[];
+  orderId?: string;
 };
 export interface FoodPostingViewProps {
   formState: FoodPostingForm | FoodPostingViewModel;
