@@ -1,1 +1,0 @@
-gcloud run deploy telegram-bot --image gcr.io/mf-cfg/food-hero --platform managed --region us-central1 --allow-unauthenticated --set-env-vars "DATABASE_URL=https://ms-cfg-default-rtdb.asia-southeast1.firebasedatabase.app/"

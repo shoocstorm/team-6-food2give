@@ -4,18 +4,22 @@ import logging
 from flask import Flask, request, jsonify
 
 import firebase_admin
-from firebase_admin import credentials, auth, db
+from firebase_admin import credentials, auth, db, storage
 import datetime
 from dotenv import load_dotenv
 import requests  
 
 import telebot
 from telebot import types
+from flask_cors import CORS
+
 # Initialize Flask server
 server = Flask(__name__)
 
 TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
+
+CORS(server)
 
 # Load the .env file
 load_dotenv()
@@ -25,8 +29,10 @@ cred = credentials.Certificate('settings.json')
 
 # Initialize the app with a service account, granting admin privileges
 firebase_admin.initialize_app(cred, {
+    'storageBucket': 'ms-cfg.appspot.com',
     'databaseURL': os.getenv("DATABASE_URL")
 })
+bucket = storage.bucket()
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -34,8 +40,18 @@ logger = logging.getLogger(__name__)
 
 @server.route('/add-food', methods=['POST'])
 def add_food_posting():
+    image_file = request.files.get('image')
+    if not image_file:
+        return jsonify({"error": "Missing image file"}), 400
+    # Save image to Firebase Storage
+    blob = bucket.blob(f"images/{image_file.filename}")
+    blob.upload_from_file(image_file)
+    blob.make_public()
+    
+    image = blob.public_url
+    
     try:
-        data = request.get_json()
+        data = request.form.to_dict()
         required_fields = ['name', 'numOfMeals', 'preparedAt', 'consumeBy', 'recurring', 'selectedDays']
         for field in required_fields:
             if field not in data:
@@ -43,7 +59,8 @@ def add_food_posting():
         
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
-        ref = db.reference(f'food_postings/{prepared_at_date}')
+        ref = db.reference('food_postings')
+        data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
 
@@ -70,6 +87,32 @@ def add_food_posting():
 
     except Exception as e:
         logging.error(f"Failed to add food posting: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@server.route('/get-food-donations', methods=['GET'])
+def get_food_donations():
+    try:
+        # Get the donorId from the query parameters
+        donor_id = request.args.get('donorId')
+        if not donor_id:
+            return jsonify({"error": "donorId query parameter is required"}), 400
+
+        # Reference to the food_postings node
+        ref = db.reference('food_postings')
+
+        # Query to filter by donorId
+        query = ref.order_by_child('donorId').equal_to(donor_id)
+
+        # Fetch and prepare the results
+        results = query.get()
+
+
+        food_donations = []
+        for key, value in results.items():
+            food_donations.append({ **value })
+
+        return jsonify({"food_donations": food_donations}), 200
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @server.route('/get-food', methods=['GET'])
@@ -207,6 +250,6 @@ def getMessage():
     
 # Start the server
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)))
 
 

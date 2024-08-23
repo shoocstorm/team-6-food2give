@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Chip,
@@ -6,6 +6,7 @@ import {
   IconButton,
   Stack,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
 import { FoodPostingForm } from "./AddFoodPostingModal";
@@ -37,6 +38,7 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
   viewMode,
 }: FoodPostingViewProps) => {
   // Form state
+  const [formIsSubmitting, setFormIsSubmitting] = useState(false);
 
   return (
     <>
@@ -113,10 +115,20 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
           variant="contained"
           color="primary"
           fullWidth
-          onClick={handleNext}
-          sx={{ marginTop: "10px" }}
+          onClick={() => {
+            setFormIsSubmitting(true);
+            if (handleNext) {
+              handleNext();
+            }
+          }}
+          sx={{ marginTop: "10px", height: "36px" }}
+          disabled={formIsSubmitting}
         >
-          Submit Post
+          {formIsSubmitting ? (
+            <CircularProgress size="1rem" sx={{ color: "black" }} />
+          ) : (
+            <span>Submit Post</span>
+          )}
         </Button>
       )}
     </>
