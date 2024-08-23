@@ -140,7 +140,7 @@ def register_user():
         logging.error(f"Failed to register user: {e}")
         return jsonify({"error": str(e)}), 500
 
-FIREBASE_WEB_API_KEY = "AIzaSyAKjQ4TskNarrno0RMdU3w7G_MhyN5f8Rg" #os.getenv('FIREBASE_WEB_API_KEY')
+FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
 
 @server.route('/login', methods=['POST'])
 def login_user():
