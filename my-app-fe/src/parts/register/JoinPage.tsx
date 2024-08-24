@@ -50,8 +50,8 @@ const JoinPage: React.FC = () => {
 
   const renderRoleSelection = () => (
     <Box sx={{ maxWidth: 600, margin: 'auto', mt: 4, p: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center" color="primary">
-        How will you play your part?
+      <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
+        Join as a
       </Typography>
       <Grid container spacing={2}>
         {roles.map((role) => (
@@ -144,8 +144,8 @@ const JoinPage: React.FC = () => {
 
     return (
       <Box sx={{ maxWidth: 600, margin: 'auto', mt: 4, p: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center" color="primary">
-          Register as {selectedRole}
+        <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
+          Register as a {selectedRole}
         </Typography>
         <form>
           {commonFields}

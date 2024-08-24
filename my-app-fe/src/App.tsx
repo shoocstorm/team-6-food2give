@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import JoinPage from "./parts/register/JoinPage";
-
+import LoginPage from "./parts/register/LoginPage";
 
 
 
@@ -108,6 +108,7 @@ function App() {
               />
               <Route path="/help" element={<HelpPage />} />
               <Route path="/join" element={<JoinPage />} />
+              <Route path="/login" element={<LoginPage />} /> 
             </Routes>
           </Router>
         </div>
