@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText, Box, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/header.css';
@@ -10,7 +10,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('idToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -21,12 +27,18 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     setDrawerOpen(false); // Close drawer after navigation
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem('idToken');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
+
   return (
     <Box>
       <AppBar position="static" className="header-appbar">
         <Toolbar 
           className="header-toolbar"
-          sx={{backgroundColor: 'green.400'}}
+          sx={{ backgroundColor: 'green.400' }}
         >
           <Typography variant="h6" className="header-title">
             {title}
@@ -54,13 +66,18 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           </ListItem>
           <ListItem button onClick={() => handleMenuItemClick('/donor')}>
             <ListItemText primary="Donors" />
-            </ListItem>
+          </ListItem>
           <ListItem button onClick={() => handleMenuItemClick('/rewards')}>
             <ListItemText primary="Rewards" />
           </ListItem>
           <ListItem button onClick={() => handleMenuItemClick('/help')}>
             <ListItemText primary="Help" />
           </ListItem>
+          {isLoggedIn && (
+            <ListItem button onClick={handleSignOut}>
+              <ListItemText primary="Sign Out" />
+            </ListItem>
+          )}
         </List>
       </Drawer>
     </Box>

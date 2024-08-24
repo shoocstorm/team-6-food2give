@@ -12,6 +12,7 @@ import Beneficiary from '../../assets/img/house.png'
 import Delivery from '../../assets/img/delivery-man.png'
 import Donor from '../../assets/img/shelter.png'
 import axios from 'axios'; // Import axios for API calls
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   name?: string;
@@ -37,6 +38,7 @@ const roles = [
 ];
 
 const JoinPage: React.FC = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const [selectedRole, setSelectedRole] = useState<string>('');
@@ -57,12 +59,17 @@ const JoinPage: React.FC = () => {
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5001/register', { ...formData, roles: [selectedRole.toLowerCase().replace(" ", "")] });
-      console.log('Registration successful:', response.data);
+        const response = await axios.post('http://localhost:5001/register', { 
+            ...formData, 
+            roles: [selectedRole.toLowerCase().replace(" ", "")] 
+        });
+        console.log('Registration successful:', response.data);
+        navigate('/login'); // Redirect to login page after successful registration
     } catch (error) {
-      console.error('Registration failed:', error);
+        console.error('Registration failed:', error);
+        navigate('/');
     }
-  };
+};
 
   const commonFields = (
     <>

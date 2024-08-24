@@ -14,22 +14,21 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5001/login', {
-        email,
-        password,
-      });
-      
-      console.log('Login successful:', response.data);
-      // Store the authentication token, if needed
-      localStorage.setItem('idToken', response.data.idToken);
+        const response = await axios.post('http://localhost:5001/login', {
+            email,
+            password,
+        });
 
-      // Redirect to the home page or any other page
-      navigate('/');
+        console.log('Login successful:', response.data);
+        localStorage.setItem('idToken', response.data.idToken);
+
+        // Redirect to the rewards page or any other page
+        navigate('/rewards');
     } catch (error) {
-      console.error('Login failed:', error);
-      setError('Login failed. Please check your credentials and try again.'); // Set error message
+        console.error('Login failed:', error);
+        setError('Login failed. Please check your credentials and try again.');
     }
-  };
+};
 
   return (
     <>
