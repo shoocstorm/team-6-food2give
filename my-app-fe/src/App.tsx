@@ -102,14 +102,16 @@ function App() {
         <div className="App">
           <Router>
             <Routes>
-              <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route
                   path="/donor"
                   element={<DonorPage donorId="Bread Talk" />}
                 />
+                <Route
+                  path="/volunteer"
+                  element={<VolunteerPage volunteerId="Bob" />}
+                />
                 <Route path="/help" element={<HelpPage />} />
-              </Route>
             </Routes>
           </Router>
         </div>
