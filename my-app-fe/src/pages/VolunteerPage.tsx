@@ -62,7 +62,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
   return (
     <>
     <Header title={`Welcome, ${volunteerId}!`} />
-    <div style={{margin: "30px"}}>
+    <div style={{margin: "40px 80px"}}>
       <Container className="container-box" >
       <Grid container spacing={3}>
       <Grid item lg={12}>
