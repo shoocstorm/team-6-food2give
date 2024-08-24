@@ -8,6 +8,7 @@ from firebase_admin import credentials, auth, db, storage
 import datetime
 from dotenv import load_dotenv
 import requests  
+from pyonemap import OneMap
 
 import telebot
 from telebot import types
@@ -17,7 +18,9 @@ from flask_cors import CORS
 server = Flask(__name__)
 
 TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
+ONE_MAP_TOKEN = os.getenv("ONE_MAP_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
+onemap = OneMap(ONE_MAP_TOKEN)
 
 CORS(server)
 
@@ -59,11 +62,11 @@ def add_food_posting():
         
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
-        ref = db.reference('food_postings')
-        data['image'] = image
+        ref = db.reference(f'food_postings')
+        # data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
-
+        new_post_ref.update({ "donorListingId": post_id }) 
         logging.info(f'Food posting added successfully with ID: {post_id}')
 
         # Fetch all chat IDs associated with emails
@@ -83,7 +86,7 @@ def add_food_posting():
                 except Exception as e:
                     logging.error(f"Failed to send message to chat_id {chat_id}: {e}")
         
-        return jsonify({"message": "Food posting added successfully", "id": post_id}), 201
+        return jsonify({"data": new_post_ref.get() }), 201
 
     except Exception as e:
         logging.error(f"Failed to add food posting: {e}")
@@ -159,7 +162,83 @@ def register_user():
         logging.error(f"Failed to register user: {e}")
         return jsonify({"error": str(e)}), 500
 
+
 FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+
+def get_user(auth_header):
+    if not auth_header:
+        return jsonify({"error": "Authorization token is missing"}), 401
+
+    id_token = auth_header.split(" ")[1]
+    decoded_token = auth.verify_id_token(id_token)
+    user_uid = decoded_token['uid']
+
+    user = auth.get_user(user_uid)
+    return user
+
+@server.route('/orders/add', methods=['POST'])
+def add_order():
+    try:
+        data = request.get_json()
+        required_fields = ['originLocation', 'destinationLocation', 'pointsAvailable', 'numberOfMeals', 'donorListingId']
+        location_fields = ['address', 'postalCode']
+        
+        auth_header = request.headers.get('Authorization')
+
+        user = get_user(auth_header)
+        
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+        
+        for loc in ['originLocation', 'destinationLocation']:
+            for field in location_fields:
+                if field not in data[loc]:
+                    return jsonify({"error": f"Missing required field in {loc}: {field}"}), 400
+        
+        if not data['originLocation']['postalCode'] or not data['destinationLocation']['postalCode']:
+            return jsonify({"error": "Postal code is required for both origin and destination locations."}), 400
+
+        donorListingId = data['donorListingId']
+        prepared_at_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        ref = db.reference(f'orders/{prepared_at_date}/{donorListingId}')
+        new_order_ref = ref.push(data)
+        order_id = new_order_ref.key
+        new_order_ref.update({"orderId": order_id, "assigned": False, "assignedTo": None, "status": "pending", "userId": user.uid})
+
+        # Retrieve the newly added order
+        order_data = new_order_ref.get()
+
+        logging.info(f"Order added successfully with orderId: {order_id}")
+        return jsonify(order_data), 201
+    except Exception as e:
+        logging.error(f"Failed to add order: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@server.route('/orders', methods=['GET'])
+def get_orders():
+    try:
+        # Get query parameters
+        date = request.args.get('date')
+        donorListingId = request.args.get('donorListingId')
+
+        if not date or not donorListingId:
+            return jsonify({"error": "Missing required query parameters: 'date' and 'donorListingId'"}), 400
+
+        # Fetch orders from Firebase based on date and donorListingId
+        ref = db.reference(f'orders/{date}/{donorListingId}')
+        orders = ref.get()
+
+        if not orders:
+            return jsonify({"message": f"No orders found for donorListingId: {donorListingId} on date: {date}"}), 404
+
+        logging.info(f"Orders retrieved successfully for donorListingId: {donorListingId} on date: {date}")
+        return jsonify(orders), 200
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve orders for donorListingId {donorListingId} on date {date}: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 @server.route('/login', methods=['POST'])
 def login_user():
@@ -200,6 +279,35 @@ def login_user():
     except Exception as e:
         logging.error(f"Failed to log in user: {e}")
         return jsonify({"error": str(e)}), 500
+    
+@server.route('/current-user', methods=['GET'])
+def get_current_user():
+    try:
+        auth_header = request.headers.get('Authorization')
+        logger.info(f"Authorization Header: {auth_header}")
+
+        if not auth_header:
+            return jsonify({"error": "Authorization token is missing"}), 401
+
+        id_token = auth_header.split(" ")[1]
+        decoded_token = auth.verify_id_token(id_token)
+        user_uid = decoded_token['uid']
+        logger.info(f"ID Token: {id_token}")
+
+        user = auth.get_user(user_uid)
+
+        # Return the user details
+        user_info = {
+            "userId": user.uid,
+            "email": user.email,
+            "roles": db.reference(f'users/{user.uid}/roles').get()
+        }
+
+        return jsonify({"user": user_info}), 200
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve current user: {e}")
+        return jsonify({"error": "Invalid token or user not authenticated"}), 401
     
 # BOT STUFF
 @bot.message_handler(commands=['attach'])
