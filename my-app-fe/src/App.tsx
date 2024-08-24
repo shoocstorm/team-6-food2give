@@ -14,7 +14,7 @@ import VolunteerPage from "./pages/VolunteerPage";
 import Layout from "./layouts/Layout";
 import JoinPage from "./parts/register/JoinPage";
 import LoginPage from "./parts/register/LoginPage";
-
+import BAPage from "./pages/BAPage";
 
 
 
@@ -113,6 +113,10 @@ function App() {
                 <Route
                   path="/volunteer"
                   element={<VolunteerPage volunteerId="Bob" />}
+                />
+                <Route
+                  path="/beneficiary"
+                  element={<BAPage baId="Woodlands Community Care Centre" />}
                 />
                 <Route path="/rewards" element={<RewardsPage />} />
                 <Route path="/help" element={<HelpPage />} />
