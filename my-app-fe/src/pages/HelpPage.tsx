@@ -1,4 +1,3 @@
-// src/pages/HelpPage.tsx
 
 import React from 'react';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
