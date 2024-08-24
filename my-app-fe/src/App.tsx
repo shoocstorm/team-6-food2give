@@ -14,8 +14,8 @@ import VolunteerPage from "./pages/VolunteerPage";
 import Layout from "./layouts/Layout";
 import JoinPage from "./parts/register/JoinPage";
 import LoginPage from "./parts/register/LoginPage";
-import BAPage from "./pages/BAPage";
-
+import BAHomePage from "./pages/BAHomePage";
+import BADonations from "./pages/BADonationsPage";
 
 
 // extending the Palette interface to include a custom color green in the theme
@@ -116,8 +116,11 @@ function App() {
                 />
                 <Route
                   path="/beneficiary"
-                  element={<BAPage baId="Woodlands Community Care Centre" />}
+                  element={<BAHomePage baId="Woodlands Community Care Centre" />}
                 />
+                <Route path="beneficiary/find-donations" 
+                element={<BADonations  baId="Woodlands Community Care Centre" />} />
+
                 <Route path="/rewards" element={<RewardsPage />} />
                 <Route path="/help" element={<HelpPage />} />
                 <Route path="/join" element={<JoinPage />} />
