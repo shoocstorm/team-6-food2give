@@ -2,7 +2,9 @@ import { Button, Card, Typography } from "@mui/material";
 import Header from "../parts/Header";
 import "../assets/css/donorPage.css";
 import { AddCircleOutline, Search } from "@mui/icons-material";
-import FoodPosting, { FoodPostingProps } from "../parts/donors/FoodPosting";
+import FoodPostingViewModal from "../parts/donors/FoodPostingViewModal";
+import BeneficiaryPosting from "../parts/beneficiaries/BeneficiaryPosting";
+import { BeneficiaryViewModel } from "../parts/beneficiaries/BeneficiaryPosting";
 import { useState } from "react";
 import AddFoodPostingModal from "../parts/donors/AddFoodPostingModal";
 import dayjs from "dayjs";
@@ -18,11 +20,11 @@ interface BaPageProps {
 const SECTIONS = ["Home", "Find Donations"]
 
 // Keep for reference
-const DUMMY_CARDS: FoodPostingProps[] = [
+const DUMMY_CARDS: BeneficiaryViewModel[] = [
   {
     foodPosting: {
       orderId: "ord1",
-      name: "nasi lemak",
+      name: "Nasi Lemak",
       numOfMeals: 20,
       preparedAt: dayjs("22 August 2024 14:20"),
       consumeBy: dayjs("22 August 2024 18:20"),
@@ -41,17 +43,48 @@ const DUMMY_CARDS: FoodPostingProps[] = [
         },
       ],
     },
+    donorId: "donor1",
+    donorLocation: "Location1",
+    driverId: "driver1",
+    driverName: "Driver1",
+    status: "Delivering",
+  },
+  {
+    foodPosting: {
+      orderId: "ord1",
+      name: "Chicken Rice",
+      numOfMeals: 20,
+      preparedAt: dayjs("22 August 2024 14:20"),
+      consumeBy: dayjs("22 August 2024 18:20"),
+      tags: ["halal", "soy"],
+      recurring: false,
+      image: null,
+      imagePreview: "/beneficiary/food_2.jpeg",
+      selectedDays: [],
+      numMealsTaken: 0,
+      requests: [
+        {
+          orderId: "ord1",
+          beneficiaryName: "Woodlands FSC",
+          numOfMealsRequested: 2,
+          subtitles: ["Finding driver..."],
+        },
+      ],
+    },
+    donorId: "donor1",
+    donorLocation: "Location1",
+    status: "Listed",
   },
 ];
 
 const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [foodDonations, setFoodDonations] = useState<FoodPostingProps[]>(DUMMY_CARDS);
+  const [foodDonations, setFoodDonations] = useState<BeneficiaryViewModel[]>(DUMMY_CARDS);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
 
-  const filterData = (query: string, data: FoodPostingProps[], filter: string): FoodPostingProps[] => {
+  const filterData = (query: string, data: BeneficiaryViewModel[], filter: string): BeneficiaryViewModel[] => {
     let filteredData = data;
   
     if (query) {
@@ -113,12 +146,12 @@ const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
           setSearchQuery={setSearchQuery} 
           className="mt-4 w-60"
           />
-        <FilterBar  setFilter={setSelectedFilter} className="mt-4"/>
+        <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
       </div>
       
       <div className="w-full grid grid-cols-2" >
-          {dataFiltered.map((post: FoodPostingProps, idx: number) => (
-            <FoodPosting key={idx} {...post} />
+          {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
+            <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
           ))}
       </div>
         {/* <Button

@@ -44,6 +44,9 @@ const FilterBar: React.FC<FilterBarProps> = ({ setFilter, className }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <MenuItem onClick={() => handleMenuItemClick("All")}>
+          All
+        </MenuItem>
         <MenuItem 
             onClick={() => handleMenuItemClick("Requests")}
             >

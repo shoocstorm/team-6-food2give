@@ -23,6 +23,7 @@
       "@/*": ["./*"],
       "@parts/*": ["./src/parts/*"],
       "@components/*": ["./src/parts/components/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
     }
   },
   "include": [
