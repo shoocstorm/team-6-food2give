@@ -3,18 +3,17 @@ import Header from "../parts/Header";
 import "../assets/css/donorPage.css";
 import { AddCircleOutline } from "@mui/icons-material";
 import FoodPosting, { FoodPostingProps } from "../parts/donors/FoodPosting";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddFoodPostingModal from "../parts/donors/AddFoodPostingModal";
-import { generateBreadcrumbs } from "../util/generateBreadcrumbs";
-import { getFoodPosting } from "../api/donor";
 import dayjs from "dayjs";
 
 interface BaPageProps {
   baId: string;
 }
 
-// Keep for reference
+const SECTIONS = ["Home", "Find Donations"]
 
+// Keep for reference
 const DUMMY_CARDS: FoodPostingProps[] = [
   {
     foodPosting: {
@@ -41,7 +40,7 @@ const DUMMY_CARDS: FoodPostingProps[] = [
   },
 ];
 
-const BAPage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
+const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [foodDonations, setFoodDonations] = useState<FoodPostingProps[]>([]);
 
@@ -59,8 +58,23 @@ const BAPage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
   return (
     <>
-      <Header title={`Welcome, ${baId}!`} />
-      
+      <Header title={`Food Hero`} />
+        <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
+            Welcome {baId}
+        </Typography>
+        <ul className="flex gap-7 items-center ml-20 py-6">
+            {SECTIONS.map((section, idx) => {
+              const formattedLink = section.toLowerCase().replace(" ", "-");
+              
+            return (
+                <li key={idx} className="text-xl text-white">
+                {section}
+                </li>
+            )}
+            
+            )}
+        </ul>
+    
       <Card raised className="container-box" >
         <div className="flex justify-between items-center">
           <Typography variant="h4" fontWeight="semibold">
@@ -94,4 +108,4 @@ const BAPage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   );
 };
 
-export default BAPage;
+export default BADonations;

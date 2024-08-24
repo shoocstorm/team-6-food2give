@@ -21,28 +21,31 @@ const FoodPosting: React.FC<FoodPostingProps> = ({ foodPosting }) => {
 
   return (
     <>
-      <Card sx={{ border: "1px solid #77dd77" }}>
+      <Card className="m-2"  sx={{ borderRadius: '5%', margin: 2 }}>
         <CardActionArea onClick={() => setIsModalOpen(true)}>
           <CardMedia
             component="img"
-            height="140"
+            height="100"
             image={
               foodPosting.imagePreview ?? "https://via.placeholder.com/300x140"
             }
             alt="Placeholder image"
-            sx={{ height: 140 }}
+            sx={{ height: 100 }}
           />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+          <CardContent className="flex flex-col">
+            
+            <Typography gutterBottom variant="body2" component="div" align="left">
               {name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" align="left">
               Consume by: {consumeBy?.toString()}
             </Typography>
-            <br />
+            <div className="text-left relative right-1 mt-2">
             {tags.map((tag: string, idx: number) => (
-              <Chip key={idx} label={tag} sx={{ marginRight: "2px " }} />
+              <Chip key={idx} label={tag} sx={{ marginRight: "3px " }} />
             ))}
+            </div>
+            
           </CardContent>
         </CardActionArea>
       </Card>
