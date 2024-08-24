@@ -8,16 +8,26 @@ from firebase_admin import credentials, auth, db, storage
 import datetime
 from dotenv import load_dotenv
 import requests  
+from pyonemap import OneMap
 
 import telebot
 from telebot import types
 from flask_cors import CORS
+import urllib.parse
+
+
+from delivery_volunteer import *
+from storage_volunteer import *
+from donor import *
+from beneficiary import *
 
 # Initialize Flask server
 server = Flask(__name__)
 
 TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
+ONE_MAP_TOKEN = os.getenv("ONE_MAP_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
+onemap = OneMap(ONE_MAP_TOKEN)
 
 CORS(server)
 
@@ -59,11 +69,11 @@ def add_food_posting():
         
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
-        ref = db.reference('food_postings')
+        ref = db.reference(f'food_postings')
         data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
-
+        new_post_ref.update({ "donorListingId": post_id }) 
         logging.info(f'Food posting added successfully with ID: {post_id}')
 
         # Fetch all chat IDs associated with emails
@@ -83,10 +93,32 @@ def add_food_posting():
                 except Exception as e:
                     logging.error(f"Failed to send message to chat_id {chat_id}: {e}")
         
-        return jsonify({"message": "Food posting added successfully", "id": post_id}), 201
+        return jsonify({"data": new_post_ref.get() }), 201
 
     except Exception as e:
         logging.error(f"Failed to add food posting: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@server.route('/delete-food', methods=['DELETE'])
+def delete_food_donation():
+    try:
+        data = request.get_json()
+        donation_id = data.get('donorListingId')
+        
+        if not donation_id:
+            return jsonify({"error": "donorListingId is required"}), 400
+
+        # Reference to the food_postings node
+        ref = db.reference('food_postings')
+
+        # Delete the specific food donation
+        ref.child(donation_id).delete()
+
+        logging.info(f'Food donation deleted successfully.')
+        return jsonify({"message": "Food donation deleted successfully"}), 200
+
+    except Exception as e:
+        logging.error(f"Failed to delete food donation: {e}")
         return jsonify({"error": str(e)}), 500
 
 @server.route('/get-food-donations', methods=['GET'])
@@ -135,7 +167,7 @@ def register_user():
         email = data.get('email')
         password = data.get('password')
         roles = data.get('roles')  # An array of roles (e.g., ['Donor', 'Volunteer'])
-
+        logging.debug("roles", roles)
         if not email or not password or not roles or not isinstance(roles, list):
             return jsonify({"error": "Missing email, password, or roles (roles must be an array)"}), 400
 
@@ -153,13 +185,155 @@ def register_user():
             'createdAt': datetime.datetime.now().isoformat()
         })
 
+        # if delivery_volunteer is in roles we register them in /deliveryvolunteer reference
+        
+        if "deliveryvolunteer" in roles:
+            deliveryVolunteerName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            availableFrom = data.get('availableFrom')
+            availableTo = data.get('availableTo')
+            
+            if not deliveryVolunteerName or not phone or not location or not availableFrom or not availableTo:
+                logging.error(f"Failed to register delivery volunteer: {user.uid} due to incomplete info.")
+            else: 
+                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, phone, location, availableFrom, availableTo)
+ 
+                if not(res):
+                    logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
+
+        if "storagevolunteer" in roles:
+            storageVolunteerName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            availableFrom = data.get('availableFrom')
+            availableTo = data.get('availableTo')
+            storageCapacity = data.get('storageCapacity')
+            
+            if not storageVolunteerName or not phone or not location or not availableFrom or not availableTo or not storageCapacity:
+                logging.error(f"Failed to register storage volunteer: {user.uid} due to incomplete info.")
+            else: 
+                res = register_storage_volunteer(user.uid, storageVolunteerName, email, phone, location, availableFrom, availableTo, storageCapacity)
+ 
+                if not(res):
+                    logging.error(f"Failed to register storage volunteer: {user.uid} due to incompleted info2.")
+        if "donor" in roles:
+            donorName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            email = data.get('email')
+            organisationName = data.get('organisationName')
+            
+            if not donorName or not phone or not location or not email or not organisationName:
+                logging.error(f"Failed to register donor: {user.uid} due to incomplete info.")
+            else: 
+                res = register_donor(user.uid, donorName, email, location, phone, organisationName)
+            
+ 
+                if not(res):
+                    logging.error(f"Failed to register donor: {user.uid} due to incompleted info.")
+        
+        if "beneficiary" in roles:
+            beneficiaryName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            email = data.get('email')
+            contactPerson = data.get('contactPerson')
+            
+            if not beneficiaryName or not phone or not location or not email or not contactPerson:
+                logging.error(f"Failed to register beneficiary: {user.uid} due to incomplete info.")
+            else: 
+                res = register_beneficiary(user.uid, beneficiaryName, email, location, phone, contactPerson)
+            
+ 
+                if not(res):
+                    logging.error(f"Failed to register beneficiary: {user.uid} due to incompleted info.")
+
+
         logging.info('User registered successfully with roles.')
+        
         return jsonify({"message": "User registered successfully", "userId": user.uid}), 201
     except Exception as e:
         logging.error(f"Failed to register user: {e}")
         return jsonify({"error": str(e)}), 500
 
+
 FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+
+def get_user(auth_header):
+    if not auth_header:
+        return jsonify({"error": "Authorization token is missing"}), 401
+
+    id_token = auth_header.split(" ")[1]
+    decoded_token = auth.verify_id_token(id_token)
+    user_uid = decoded_token['uid']
+
+    user = auth.get_user(user_uid)
+    return user
+ 
+@server.route('/orders/add', methods=['POST'])
+def add_order():
+    try:
+        data = request.get_json()
+        required_fields = ['originLocation', 'destinationLocation', 'pointsAvailable', 'numberOfMeals', 'donorListingId']
+        location_fields = ['address', 'postalCode']
+        
+        auth_header = request.headers.get('Authorization')
+
+        user = get_user(auth_header)
+        
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing required field: {field}"}), 400
+        
+        for loc in ['originLocation', 'destinationLocation']:
+            for field in location_fields:
+                if field not in data[loc]:
+                    return jsonify({"error": f"Missing required field in {loc}: {field}"}), 400
+        
+        if not data['originLocation']['postalCode'] or not data['destinationLocation']['postalCode']:
+            return jsonify({"error": "Postal code is required for both origin and destination locations."}), 400
+
+        donorListingId = data['donorListingId']
+        prepared_at_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        ref = db.reference(f'orders/{prepared_at_date}/{donorListingId}')
+        new_order_ref = ref.push(data)
+        order_id = new_order_ref.key
+        new_order_ref.update({"orderId": order_id, "assigned": False, "assignedTo": None, "status": "pending", "userId": user.uid})
+
+        # Retrieve the newly added order
+        order_data = new_order_ref.get()
+
+        logging.info(f"Order added successfully with orderId: {order_id}")
+        return jsonify(order_data), 201
+    except Exception as e:
+        logging.error(f"Failed to add order: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@server.route('/orders', methods=['GET'])
+def get_orders():
+    try:
+        # Get query parameters
+        date = request.args.get('date')
+        donorListingId = request.args.get('donorListingId')
+
+        if not date or not donorListingId:
+            return jsonify({"error": "Missing required query parameters: 'date' and 'donorListingId'"}), 400
+
+        # Fetch orders from Firebase based on date and donorListingId
+        ref = db.reference(f'orders/{date}/{donorListingId}')
+        orders = ref.get()
+
+        if not orders:
+            return jsonify({"message": f"No orders found for donorListingId: {donorListingId} on date: {date}"}), 404
+
+        logging.info(f"Orders retrieved successfully for donorListingId: {donorListingId} on date: {date}")
+        return jsonify(orders), 200
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve orders for donorListingId {donorListingId} on date {date}: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 @server.route('/login', methods=['POST'])
 def login_user():
@@ -200,6 +374,55 @@ def login_user():
     except Exception as e:
         logging.error(f"Failed to log in user: {e}")
         return jsonify({"error": str(e)}), 500
+    
+@server.route('/current-user', methods=['GET'])
+def get_current_user():
+    try:
+        auth_header = request.headers.get('Authorization')
+        logger.info(f"Authorization Header: {auth_header}")
+
+        if not auth_header:
+            return jsonify({"error": "Authorization token is missing"}), 401
+
+        id_token = auth_header.split(" ")[1]
+        decoded_token = auth.verify_id_token(id_token)
+        user_uid = decoded_token['uid']
+        logger.info(f"ID Token: {id_token}")
+
+        user = auth.get_user(user_uid)
+
+        # Return the user details
+        user_info = {
+            "userId": user.uid,
+            "email": user.email,
+            "roles": db.reference(f'users/{user.uid}/roles').get()
+        }
+
+        return jsonify({"user": user_info}), 200
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve current user: {e}")
+        return jsonify({"error": "Invalid token or user not authenticated"}), 401
+
+
+#dont use yet
+# @server.route('/get-points', methods=['GET'])
+# def get_user_points():
+#     try:
+#         data = request.get_json()
+#         userid = data.get('userId')
+
+#         if not userid:
+#             return jsonify({"error": "userId parameter is required"}), 400
+        
+#         ref = db.reference(f'users/{userid}')
+
+#         user_points = ref.get('points',0)
+
+#         logging.info('User points retrieved successfully.')
+#         return jsonify(user_points), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
     
 # BOT STUFF
 @bot.message_handler(commands=['attach'])
@@ -248,8 +471,8 @@ def getMessage():
     
     return "OK", 200  # Ensure valid response is always returned
     
-# Start the server
+# Start the serverr
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)))
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)), debug=True)
 
 

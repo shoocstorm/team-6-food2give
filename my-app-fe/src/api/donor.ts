@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { FoodPostingProps } from "../parts/donors/FoodPosting";
 import { FoodPostingViewModel } from "../parts/donors/FoodPostingView";
 
+
 export const addFoodPosting = async (donorId: string, foodPosting: FoodPostingForm) => {
   const data = new FormData();
   data.append('donorId', donorId);
@@ -19,7 +20,7 @@ export const addFoodPosting = async (donorId: string, foodPosting: FoodPostingFo
     data.append('image', foodPosting.image);
   }
 
-  const response = await axios.post("http://localhost:5001/add-food", data, {
+  const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/add-food`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     }
@@ -33,7 +34,7 @@ export type FoodPostingGetData = FoodPostingViewModel & {
 
 export const getFoodPosting = async (donorId: string): Promise<FoodPostingProps[]> => {
   const params = { donorId };
-  const response = await axios.get("http://localhost:5001/get-food-donations", {params});
+  const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/get-food-donations`, {params});
 
   const data =  response.data['food_donations'].map((e: FoodPostingGetData) => {
     const { donorId, ...rest } = e;
