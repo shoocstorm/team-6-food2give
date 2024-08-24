@@ -9,6 +9,7 @@ import HelpPage from './pages/HelpPage';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import RewardsPage from './pages/RewardsPage'; // Import the RewardsPage component
 import VolunteerPage from "./pages/VolunteerPage";
 import Layout from "./layouts/Layout";
 
@@ -111,6 +112,7 @@ function App() {
                   path="/volunteer"
                   element={<VolunteerPage volunteerId="Bob" />}
                 />
+                <Route path="/rewards" element={<RewardsPage />} />
                 <Route path="/help" element={<HelpPage />} />
             </Routes>
           </Router>
