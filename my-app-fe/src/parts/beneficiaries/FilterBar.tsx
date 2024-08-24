@@ -34,10 +34,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ setFilter, className }) => {
     <div className={className}>
       <button
         onClick={handleClick}
-        className="border border-1 px-4 py-2 border-slate-700 rounded-lg bg-slate-900 text-white/40 text-base"
+        className="border border-1 px-4 py-2 border-slate-700 rounded-md bg-slate-900 text-white/40 text-base"
         >
         {selectedFilter || "Filter"}
-        <FilterListIcon className="ml-1"/>
+        {!selectedFilter && <FilterListIcon className="ml-1"/>}
       </button>
       <Menu
         anchorEl={anchorEl}
