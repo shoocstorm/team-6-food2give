@@ -9,6 +9,7 @@ import HelpPage from './pages/HelpPage';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import JoinPage from "./parts/register/JoinPage";
 
 
 
@@ -106,6 +107,7 @@ function App() {
                 element={<DonorPage donorId="Bread Talk" />}
               />
               <Route path="/help" element={<HelpPage />} />
+              <Route path="/join" element={<JoinPage />} />
             </Routes>
           </Router>
         </div>
