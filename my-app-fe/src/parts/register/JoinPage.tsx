@@ -11,12 +11,14 @@ import StorageVolunteer from '../../assets/img/warehouse.png'
 import Beneficiary from '../../assets/img/house.png'
 import Delivery from '../../assets/img/delivery-man.png'
 import Donor from '../../assets/img/shelter.png'
+import axios from 'axios'; // Import axios for API calls
 
 interface FormData {
   name?: string;
   email?: string;
   password?: string;
   retypePassword?: string;
+  address?: string; // Add address field
   postalCode?: string;
   contactPerson?: string;
   phoneNumber?: string;
@@ -52,125 +54,77 @@ const JoinPage: React.FC = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const renderRoleSelection = () => (
-    <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
-        Join as a
-      </Typography>
-      <Grid container spacing={2}>
-        {roles.map((role) => (
-          <Grid item xs={6} key={role.name}>
-            <Card 
-              onClick={() => handleRoleSelect(role.name)} 
-              sx={{ 
-                cursor: 'pointer', 
-                bgcolor: theme.palette.background.paper,
-                '&:hover': {
-                  bgcolor: theme.palette.green[500],
-                }
-              }}
-            >
-              <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography variant="h3" sx={{ mb: 1 }}>{role.icon}</Typography>
-                <Typography variant="body1" align="center">
-                  {role.name}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5001/register', { ...formData, roles: [selectedRole.toLowerCase().replace(" ", "")] });
+      console.log('Registration successful:', response.data);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  };
+
+  const commonFields = (
+    <>
+      <TextField fullWidth label="Full Name (as in NRIC)" name="name" onChange={handleFormChange} sx={{ mb: 2 }} />
+      <TextField fullWidth label="Email Address" name="email" type="email" onChange={handleFormChange} sx={{ mb: 2 }} />
+      <TextField fullWidth label="Password" name="password" type="password" onChange={handleFormChange} sx={{ mb: 2 }} />
+      <TextField fullWidth label="Retype Password" name="retypePassword" type="password" onChange={handleFormChange} sx={{ mb: 2 }} />
+      <TextField fullWidth label="Address" name="address" onChange={handleFormChange} sx={{ mb: 2 }} /> {/* New address field */}
+    </>
   );
 
-  const renderRegistrationForm = () => {
-    const commonFields = (
+  const roleSpecificFields = {
+    'Beneficiary': (
       <>
-        <TextField fullWidth label="Full Name (as in NRIC)" name="name" onChange={handleFormChange} sx={{ mb: 2 }} />
-        <TextField fullWidth label="Email Address" name="email" type="email" onChange={handleFormChange} sx={{ mb: 2 }} />
-        <TextField fullWidth label="Password" name="password" type="password" onChange={handleFormChange} sx={{ mb: 2 }} />
-        <TextField fullWidth label="Retype Password" name="retypePassword" type="password" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Contact Person" name="contactPerson" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Phone Number" name="phoneNumber" onChange={handleFormChange} sx={{ mb: 2 }} />
       </>
-    );
-
-    const roleSpecificFields = {
-      'Beneficiary': (
-        <>
-          <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Contact Person" name="contactPerson" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Phone Number" name="phoneNumber" onChange={handleFormChange} sx={{ mb: 2 }} />
-        </>
-      ),
-      'Storage Volunteer': (
-        <>
-          <TextField fullWidth label="Phone Number (+65)" name="phone" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Postal Code" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-            <DatePicker
-              label="Available From"
-              value={formData.availableFrom}
-              onChange={(newValue) => setFormData({ ...formData, availableFrom: newValue })}
-            />
-            <DatePicker
-              label="Available To"
-              value={formData.availableTo}
-              onChange={(newValue) => setFormData({ ...formData, availableTo: newValue })}
-            />
-          </Box>
-          <TextField fullWidth label="Storage Capacity (units)" name="storageCapacity" type="number" onChange={handleFormChange} sx={{ mb: 2 }} />
-        </>
-      ),
-      'Delivery Volunteer': (
-        <>
-          <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-            <DatePicker
-              label="Available From"
-              value={formData.availableFrom}
-              onChange={(newValue) => setFormData({ ...formData, availableFrom: newValue })}
-            />
-            <DatePicker
-              label="Available To"
-              value={formData.availableTo}
-              onChange={(newValue) => setFormData({ ...formData, availableTo: newValue })}
-            />
-          </Box>
-        </>
-      ),
-      'Donor': (
-        <>
-          <TextField fullWidth label="Phone" name="phone" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Organisation Name/UEN Number" name="organisation" onChange={handleFormChange} sx={{ mb: 2 }} />
-          <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
-        </>
-      )
-    };
-
-    return (
-      <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
-          Register as a {selectedRole}
-        </Typography>
-        <form>
-          {commonFields}
-          {roleSpecificFields[selectedRole as keyof typeof roleSpecificFields]}
-          <Button 
-            variant="contained" 
-            color="primary" 
-            fullWidth 
-            sx={{ 
-              mt: 2,
-              bgcolor: theme.palette.green[300],
-              '&:hover': {
-                bgcolor: theme.palette.green[400],
-              }
-            }}
-          >
-            Register
-          </Button>
-        </form>
-      </Box>
-    );
+    ),
+    'Storage Volunteer': (
+      <>
+        <TextField fullWidth label="Phone Number (+65)" name="phone" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Postal Code" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <DatePicker
+            label="Available From"
+            value={formData.availableFrom}
+            onChange={(newValue) => setFormData({ ...formData, availableFrom: newValue })}
+          />
+          <DatePicker
+            label="Available To"
+            value={formData.availableTo}
+            onChange={(newValue) => setFormData({ ...formData, availableTo: newValue })}
+          />
+        </Box>
+        <TextField fullWidth label="Storage Capacity (units)" name="storageCapacity" type="number" onChange={handleFormChange} sx={{ mb: 2 }} />
+      </>
+    ),
+    'Delivery Volunteer': (
+      <>
+        <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <DatePicker
+            label="Available From"
+            value={formData.availableFrom}
+            onChange={(newValue) => setFormData({ ...formData, availableFrom: newValue })}
+          />
+          <DatePicker
+            label="Available To"
+            value={formData.availableTo}
+            onChange={(newValue) => setFormData({ ...formData, availableTo: newValue })}
+          />
+        </Box>
+      </>
+    ),
+    'Donor': (
+      <>
+        <TextField fullWidth label="Phone" name="phone" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Organisation Name/UEN Number" name="organisation" onChange={handleFormChange} sx={{ mb: 2 }} />
+        <TextField fullWidth label="Location (Postal Code)" name="postalCode" onChange={handleFormChange} sx={{ mb: 2 }} />
+      </>
+    )
   };
 
   return (
@@ -184,7 +138,61 @@ const JoinPage: React.FC = () => {
             <StepLabel>Register</StepLabel>
           </Step>
         </Stepper>
-        {activeStep === 0 ? renderRoleSelection() : renderRegistrationForm()}
+        {activeStep === 0 ? (
+          <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
+            <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
+              Join as a
+            </Typography>
+            <Grid container spacing={2}>
+              {roles.map((role) => (
+                <Grid item xs={6} key={role.name}>
+                  <Card 
+                    onClick={() => handleRoleSelect(role.name)} 
+                    sx={{ 
+                      cursor: 'pointer', 
+                      bgcolor: theme.palette.background.paper,
+                      '&:hover': {
+                        bgcolor: theme.palette.green[500],
+                      }
+                    }}
+                  >
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <Typography variant="h3" sx={{ mb: 1 }}>{role.icon}</Typography>
+                      <Typography variant="body1" align="center">
+                        {role.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        ) : (
+          <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
+            <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
+              Register as a {selectedRole}
+            </Typography>
+            <form onSubmit={handleRegister}>
+              {commonFields}
+              {roleSpecificFields[selectedRole as keyof typeof roleSpecificFields]}
+              <Button 
+                type="submit"
+                variant="contained" 
+                color="primary" 
+                fullWidth 
+                sx={{ 
+                  mt: 2,
+                  bgcolor: theme.palette.green[300],
+                  '&:hover': {
+                    bgcolor: theme.palette.green[400],
+                  }
+                }}
+              >
+                Register
+              </Button>
+            </form>
+          </Box>
+        )}
       </Box>
     </LocalizationProvider>
   );
