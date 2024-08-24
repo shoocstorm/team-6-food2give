@@ -9,6 +9,8 @@ import HelpPage from './pages/HelpPage';
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import VolunteerPage from "./pages/VolunteerPage";
+import Layout from "./layouts/Layout";
 
 
 
@@ -100,12 +102,16 @@ function App() {
         <div className="App">
           <Router>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/donor"
-                element={<DonorPage donorId="Bread Talk" />}
-              />
-              <Route path="/help" element={<HelpPage />} />
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/donor"
+                  element={<DonorPage donorId="Bread Talk" />}
+                />
+                <Route
+                  path="/volunteer"
+                  element={<VolunteerPage volunteerId="Bob" />}
+                />
+                <Route path="/help" element={<HelpPage />} />
             </Routes>
           </Router>
         </div>
