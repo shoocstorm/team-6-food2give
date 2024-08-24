@@ -179,10 +179,13 @@ def register_user():
 
         # Store user roles in Firebase Realtime Database
         user_ref = db.reference(f'users/{user.uid}')
+        user_id = user_ref.key
         user_ref.set({
+            'userId': user_id,
             'email': email,
             'roles': roles,
-            'createdAt': datetime.datetime.now().isoformat()
+            'createdAt': datetime.datetime.now().isoformat(),
+            'points': 0
         })
 
         # if delivery_volunteer is in roles we register them in /deliveryvolunteer reference
@@ -408,25 +411,24 @@ def get_current_user():
         logging.error(f"Failed to retrieve current user: {e}")
         return jsonify({"error": "Invalid token or user not authenticated"}), 401
 
+@server.route('/get-points', methods=['GET'])
+def get_user_points():
+    try:
+        data = request.get_json()
+        userid = data.get('userId')
 
-#dont use yet
-# @server.route('/get-points', methods=['GET'])
-# def get_user_points():
-#     try:
-#         data = request.get_json()
-#         userid = data.get('userId')
-
-#         if not userid:
-#             return jsonify({"error": "userId parameter is required"}), 400
+        if not userid:
+            return jsonify({"error": "userId parameter is required"}), 400
         
-#         ref = db.reference(f'users/{userid}')
+        ref = db.reference(f'users/{userid}')
 
-#         user_points = ref.get('points',0)
+        user_data = ref.get()
+        user_points = user_data.get('points', 0)
 
-#         logging.info('User points retrieved successfully.')
-#         return jsonify(user_points), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        logging.info('User points retrieved successfully.')
+        return jsonify(user_points), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
 # BOT STUFF
 @bot.message_handler(commands=['attach'])
