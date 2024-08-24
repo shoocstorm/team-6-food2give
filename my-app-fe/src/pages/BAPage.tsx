@@ -9,8 +9,8 @@ import { generateBreadcrumbs } from "../util/generateBreadcrumbs";
 import { getFoodPosting } from "../api/donor";
 import dayjs from "dayjs";
 
-interface DonorPageProps {
-  donorId: string;
+interface BaPageProps {
+  baId: string;
 }
 
 // Keep for reference
@@ -41,7 +41,7 @@ const DUMMY_CARDS: FoodPostingProps[] = [
   },
 ];
 
-const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
+const BAPage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [foodDonations, setFoodDonations] = useState<FoodPostingProps[]>([]);
 
@@ -59,10 +59,8 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
 
   return (
     <>
-      <Header title={`Welcome, ${donorId}!`} />
-      <div className="breadcrumbs">
-        {generateBreadcrumbs(["Donor", "Homepage"], ["/"])}
-      </div>
+      <Header title={`Welcome, ${baId}!`} />
+      
       <Card raised className="container-box" >
         <div className="flex justify-between items-center">
           <Typography variant="h4" fontWeight="semibold">
@@ -80,7 +78,7 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
         </div>
         <br />
         <AddFoodPostingModal
-          donorId={donorId}
+          donorId={baId}
           isModalOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
         />
@@ -96,4 +94,4 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
   );
 };
 
-export default DonorPage;
+export default BAPage;
