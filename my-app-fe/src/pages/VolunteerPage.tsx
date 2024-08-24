@@ -25,7 +25,7 @@ const availableJobPostings = [
     timeToExpiry: 78
   },
   {
-    orderId: "78",
+    orderId: "29",
     foodPostingId: "789345",
     donorId: "Astons",
     donorLocation: "Holland Village Street 1",
@@ -68,7 +68,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
       <Grid item lg={12}>
           <Typography style={{textAlign: "left"}} variant="h4">Currently Delivering</Typography>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} lg={4}>
             <JobPosting jobPosting={currentJob} onClick={() => {
               setIsOpen(true)
               setSelectedJob(currentJob)
@@ -79,7 +79,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
         </Grid>
         {availableJobPostings.map(posting => (
           <>
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} lg={4}>
             <JobPosting jobPosting={posting} onClick={() => {
               setIsOpen(true)
               setSelectedJob(posting)
