@@ -19,6 +19,7 @@ import {
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { FoodPostingForm } from "../donors/AddFoodPostingModal";
+import { ChangeEvent } from "react";
 
 export interface AddFoodPostingFormProps {
   formState: FoodPostingForm;
@@ -73,20 +74,7 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 2,
-        border: "1px solid #77dd77",
-      }}
-    >
+    <>
       <div className="flex flex-row justify-between items-center">
         <Typography variant="h6">Add Food Posting</Typography>
         <IconButton
@@ -126,6 +114,22 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
         value={formState.name}
         onChange={(e) =>
           setFormState((form) => ({ ...form, name: e.target.value }))
+        }
+      />
+      <TextField
+        type="number"
+        label="Number of Meals"
+        value={formState.numOfMeals}
+        fullWidth
+        margin="normal"
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setFormState((form) => ({
+            ...form,
+            numOfMeals:
+              parseInt(e.target.value) >= 0
+                ? parseInt(e.target.value)
+                : form.numOfMeals,
+          }))
         }
       />
       <DateTimePicker
@@ -216,7 +220,7 @@ const AddFoodPostingForm: React.FC<AddFoodPostingFormProps> = ({
       >
         Next
       </Button>
-    </Box>
+    </>
   );
 };
 
