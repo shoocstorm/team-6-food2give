@@ -7,6 +7,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import StorageVolunteer from '../../assets/img/warehouse.png'
+import Beneficiary from '../../assets/img/house.png'
+import Delivery from '../../assets/img/delivery-man.png'
+import Donor from '../../assets/img/shelter.png'
 
 interface FormData {
   name?: string;
@@ -24,10 +28,10 @@ interface FormData {
 }
 
 const roles = [
-  { name: 'Beneficiary', icon: '🏠' },
-  { name: 'Storage Volunteer', icon: '🗄️' },
-  { name: 'Delivery Volunteer', icon: '🚚' },
-  { name: 'Donor', icon: '🤲' }
+  { name: 'Beneficiary', icon: <img src={Beneficiary} alt="Storage Volunteer" width="50" height="50" /> },
+  { name: 'Storage Volunteer', icon: <img src={StorageVolunteer} alt="Storage Volunteer" width="50" height="50" /> },
+  { name: 'Delivery Volunteer', icon: <img src={Delivery} alt="Storage Volunteer" width="50" height="50" /> },
+  { name: 'Donor', icon: <img src={Donor} alt="Storage Volunteer" width="50" height="50" /> }
 ];
 
 const JoinPage: React.FC = () => {
