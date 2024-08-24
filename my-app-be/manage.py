@@ -13,6 +13,8 @@ from pyonemap import OneMap
 import telebot
 from telebot import types
 from flask_cors import CORS
+import urllib.parse
+
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -90,6 +92,28 @@ def add_food_posting():
 
     except Exception as e:
         logging.error(f"Failed to add food posting: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@server.route('/delete-food', methods=['DELETE'])
+def delete_food_donation():
+    try:
+        data = request.get_json()
+        donation_id = data.get('donorListingId')
+        
+        if not donation_id:
+            return jsonify({"error": "donorListingId is required"}), 400
+
+        # Reference to the food_postings node
+        ref = db.reference('food_postings')
+
+        # Delete the specific food donation
+        ref.child(donation_id).delete()
+
+        logging.info(f'Food donation deleted successfully.')
+        return jsonify({"message": "Food donation deleted successfully"}), 200
+
+    except Exception as e:
+        logging.error(f"Failed to delete food donation: {e}")
         return jsonify({"error": str(e)}), 500
 
 @server.route('/get-food-donations', methods=['GET'])
@@ -308,6 +332,26 @@ def get_current_user():
     except Exception as e:
         logging.error(f"Failed to retrieve current user: {e}")
         return jsonify({"error": "Invalid token or user not authenticated"}), 401
+
+
+#dont use yet
+# @server.route('/get-points', methods=['GET'])
+# def get_user_points():
+#     try:
+#         data = request.get_json()
+#         userid = data.get('userId')
+
+#         if not userid:
+#             return jsonify({"error": "userId parameter is required"}), 400
+        
+#         ref = db.reference(f'users/{userid}')
+
+#         user_points = ref.get('points',0)
+
+#         logging.info('User points retrieved successfully.')
+#         return jsonify(user_points), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
     
 # BOT STUFF
 @bot.message_handler(commands=['attach'])
