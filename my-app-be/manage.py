@@ -284,6 +284,7 @@ def login_user():
 def get_current_user():
     try:
         auth_header = request.headers.get('Authorization')
+        logger.info(f"Authorization Header: {auth_header}")
 
         if not auth_header:
             return jsonify({"error": "Authorization token is missing"}), 401
@@ -291,6 +292,7 @@ def get_current_user():
         id_token = auth_header.split(" ")[1]
         decoded_token = auth.verify_id_token(id_token)
         user_uid = decoded_token['uid']
+        logger.info(f"ID Token: {id_token}")
 
         user = auth.get_user(user_uid)
 
