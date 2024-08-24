@@ -50,6 +50,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <ListItem button onClick={() => handleMenuItemClick('/organization')}>
             <ListItemText primary="Organization" />
           </ListItem>
+          <ListItem button onClick={() => handleMenuItemClick('/rewards')}>
+            <ListItemText primary="Rewards" />
+          </ListItem>
           <ListItem button onClick={() => handleMenuItemClick('/help')}>
             <ListItemText primary="Help" />
           </ListItem>
