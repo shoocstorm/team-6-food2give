@@ -4,7 +4,7 @@ from firebase_admin import db
 donor_routes = Blueprint('donor_routes', __name__)
 
 def register_donor(donorId, donorName, email,
-                   location, phone):
+                   location, phone, organisationName):
   if "" in [donorName, location, phone]:
     return False
   
@@ -15,6 +15,7 @@ def register_donor(donorId, donorName, email,
     "email": email,
     "location": location,
     "phone": phone,
+    "organisationName": organisationName
   }
   ref.child(donorId).set(data)
   return True
