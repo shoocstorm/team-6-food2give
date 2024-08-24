@@ -5,7 +5,7 @@ ROUTE_PREFIX = "delivery_volunteer"
 delivery_volunteer_routes = Blueprint('delivery_volunteer_routes', __name__)
 
 def register_delivery_volunteer(deliveryVolunteerId, deliveryVolunteerName,
-             email, phone, location, availability):
+                                email, phone, location, availableFrom, availableTo):
   if "" in [deliveryVolunteerId, deliveryVolunteerName, phone, location]:
     return False
   
@@ -16,7 +16,9 @@ def register_delivery_volunteer(deliveryVolunteerId, deliveryVolunteerName,
     "email": email,
     "phone": phone,
     "location": location,
-    "availability": availability
+    "availableFrom": availableFrom,
+    "availableTo": availableTo,
+
   }
   ref.child(deliveryVolunteerId).set(data)
   return True

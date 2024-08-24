@@ -5,7 +5,8 @@ ROUTE_PREFIX = "storage_volunteer"
 storage_volunteer_routes = Blueprint('storage_volunteer_routes', __name__)
 
 def register_storage_volunteer(storageVolunteerId, storageVolunteerName,
-                               email, phone, location, availability, storageCapacity):
+                               email, phone, location, availableFrom,
+                               availableTo, storageCapacity):
   if "" in [storageVolunteerId, storageVolunteerName, phone, location, storageCapacity]:
     return False
   
@@ -16,7 +17,8 @@ def register_storage_volunteer(storageVolunteerId, storageVolunteerName,
     "email": email,
     "phone": phone,
     "location": location,
-    "availability": availability,
+    "availableFrom": availableFrom,
+    "availableTo": availableTo,
     "storageCapacity": storageCapacity,
   }
   ref.child(storageVolunteerId).set(data)
