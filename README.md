@@ -1,4 +1,4 @@
-# FRONTEND 
+# FRONTEND
 
 ```
 cd my-app-fe
@@ -57,3 +57,10 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ---
 
 # BACKEND
+
+1. Create a virtual environment `python -m venv venv`
+2. go to `my-app-be`
+3. `pip install -r requirements.txt`
+4. set `my-app-be/settings.json` to the file vanessa sent in the chat (alternatively generate your own `settings.json` by creating a new public key in firebase console)
+5. create a .env file and place the environment variables sent in `team6` chat
+6. run `dotenv run -- python manage.py`

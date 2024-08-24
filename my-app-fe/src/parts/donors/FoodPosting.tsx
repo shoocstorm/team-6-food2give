@@ -33,11 +33,23 @@ const FoodPosting: React.FC<FoodPostingProps> = ({ foodPosting }) => {
             sx={{ height: 140 }}
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {name}
-            </Typography>
+            <div className="flex flex-row gap-2 justify-center">
+              <Typography gutterBottom variant="h5" component="div">
+                {name}
+              </Typography>
+              <Chip
+                sx={{ borderRadius: 0 }}
+                label={`${foodPosting.numMealsTaken}/${
+                  foodPosting.numOfMeals ?? 0
+                } meal(s) taken`}
+                className="mb-4"
+              />
+            </div>
             <Typography variant="body2" color="text.secondary">
-              Consume by: {consumeBy?.toString()}
+              Consume by:{" "}
+              {consumeBy
+                ?.tz("Asia/Singapore")
+                .format("DD/MM/YYYY HH:mm:ss [SGT]")}
             </Typography>
             <br />
             {tags.map((tag: string, idx: number) => (
