@@ -26,8 +26,11 @@ const FoodPosting: React.FC<FoodPostingProps> = ({ foodPosting }) => {
           <CardMedia
             component="img"
             height="140"
-            image="https://via.placeholder.com/300x140"
+            image={
+              foodPosting.imagePreview ?? "https://via.placeholder.com/300x140"
+            }
             alt="Placeholder image"
+            sx={{ height: 140 }}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">

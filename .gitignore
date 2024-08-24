@@ -20,7 +20,7 @@ yarn-error.log*
 # Ignore build folders
 /my-app-fe/build/
 /my-app-be/build/
-
+/my-app-be/settings.json
 # Ignore testing coverage
 /my-app-fe/coverage/
 /my-app-be/coverage/

@@ -4,6 +4,7 @@ import { Dayjs } from "dayjs";
 import AddFoodPostingForm from "../forms/AddFoodPostingForm";
 import AddFoodTNCForm from "../forms/AddFoodTNCForm";
 import FoodPostingView, { FoodPostingViewMode } from "./FoodPostingView";
+import { addFoodPosting } from "../../api/donor";
 
 export interface AddFoodPostingModalProps {
   donorId: string;
@@ -97,11 +98,15 @@ const AddFoodPostingModal: React.FC<AddFoodPostingModalProps> = ({
             handleNext={() => setStage(AddFoodPostingFormStage.VERIFY)}
             onClose={onClose}
             resetFormState={resetFormState}
+            submitButtonText="Review Post"
           />
         ) : (
           <FoodPostingView
             formState={formState}
-            handleNext={() => {}}
+            handleNext={async () => {
+              await addFoodPosting(donorId, formState);
+              onClose();
+            }}
             onClose={onClose}
             resetFormState={resetFormState}
             viewMode={FoodPostingViewMode.FORM}

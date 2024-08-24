@@ -20,6 +20,7 @@ export const generateBreadcrumbs = (
                 underline="hover"
                 color="inherit"
                 href={links.length - 1 >= idx ? links[idx] : "/"}
+                key={idx}
               >
                 {lab}
               </Link>
