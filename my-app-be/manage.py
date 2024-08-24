@@ -17,6 +17,9 @@ import urllib.parse
 
 
 from delivery_volunteer import *
+from storage_volunteer import *
+from donor import *
+from beneficiary import *
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -185,7 +188,7 @@ def register_user():
         # if delivery_volunteer is in roles we register them in /deliveryvolunteer reference
         print("roles", roles)
         if "deliveryvolunteer" in roles:
-            deliveryVolunteerName = data.get('deliveryVolunteerName')
+            deliveryVolunteerName = data.get('name')
             phone = data.get('phone')
             location = data.get('location')
             availability = data.get('availability')
@@ -197,6 +200,51 @@ def register_user():
  
                 if not(res):
                     logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
+
+        if "storagevolunteer" in roles:
+            storageVolunteerName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            availability = data.get('availability')
+            storageCapacity = data.get('storageCapacity')
+            
+            if not storageVolunteerName or not phone or not location or not availability or not storageCapacity:
+                logging.error(f"Failed to register storage volunteer: {user.uid} due to incomplete info.")
+            else: 
+                res = register_storage_volunteer(user.uid, storageVolunteerName, email, phone, location, availability, storageCapacity)
+ 
+                if not(res):
+                    logging.error(f"Failed to register storage volunteer: {user.uid} due to incompleted info2.")
+        if "donor" in roles:
+            donorName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            email = data.get('email')
+            
+            if not donorName or not phone or not location or not email:
+                logging.error(f"Failed to register donor: {user.uid} due to incomplete info.")
+            else: 
+                res = register_donor(user.uid, donorName, email, location, phone)
+            
+ 
+                if not(res):
+                    logging.error(f"Failed to register donor: {user.uid} due to incompleted info.")
+        
+        if "beneficiary" in roles:
+            beneficiaryName = data.get('name')
+            phone = data.get('phone')
+            location = data.get('location')
+            email = data.get('email')
+            
+            if not beneficiaryName or not phone or not location or not email:
+                logging.error(f"Failed to register beneficiary: {user.uid} due to incomplete info.")
+            else: 
+                res = register_beneficiary(user.uid, beneficiaryName, email, location, phone)
+            
+ 
+                if not(res):
+                    logging.error(f"Failed to register beneficiary: {user.uid} due to incompleted info.")
+
 
         logging.info('User registered successfully with roles.')
         
@@ -218,7 +266,7 @@ def get_user(auth_header):
 
     user = auth.get_user(user_uid)
     return user
-
+ 
 @server.route('/orders/add', methods=['POST'])
 def add_order():
     try:
