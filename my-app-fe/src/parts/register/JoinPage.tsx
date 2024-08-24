@@ -49,7 +49,7 @@ const JoinPage: React.FC = () => {
   };
 
   const renderRoleSelection = () => (
-    <Box sx={{ maxWidth: 600, margin: 'auto', mt: 4, p: 2 }}>
+    <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
         Join as a
       </Typography>
@@ -143,7 +143,7 @@ const JoinPage: React.FC = () => {
     };
 
     return (
-      <Box sx={{ maxWidth: 600, margin: 'auto', mt: 4, p: 2 }}>
+      <Box sx={{ maxWidth: 600, margin: 'auto', mt: 2, p: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom align="center" color="primary" className="py-2">
           Register as a {selectedRole}
         </Typography>
@@ -172,7 +172,7 @@ const JoinPage: React.FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ bgcolor: theme.palette.background.default, minHeight: '100vh', color: theme.palette.text.primary }}>
-        <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+        <Stepper activeStep={activeStep} sx={{ pt: 2, pb: 2, px:20, justifyContent: 'center' }}>
           <Step>
             <StepLabel>Select Role</StepLabel>
           </Step>
