@@ -14,6 +14,8 @@ import telebot
 from telebot import types
 from flask_cors import CORS
 
+from delivery_volunteer import *
+
 # Initialize Flask server
 server = Flask(__name__)
 
@@ -63,7 +65,7 @@ def add_food_posting():
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
         ref = db.reference(f'food_postings')
-        # data['image'] = image
+        data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
         new_post_ref.update({ "donorListingId": post_id }) 
@@ -138,7 +140,7 @@ def register_user():
         email = data.get('email')
         password = data.get('password')
         roles = data.get('roles')  # An array of roles (e.g., ['Donor', 'Volunteer'])
-
+        logging.debug("roles", roles)
         if not email or not password or not roles or not isinstance(roles, list):
             return jsonify({"error": "Missing email, password, or roles (roles must be an array)"}), 400
 
@@ -156,7 +158,24 @@ def register_user():
             'createdAt': datetime.datetime.now().isoformat()
         })
 
+        # if delivery_volunteer is in roles we register them in /deliveryvolunteer reference
+        print("roles", roles)
+        if "deliveryvolunteer" in roles:
+            deliveryVolunteerName = data.get('deliveryVolunteerName')
+            phone = data.get('phone')
+            location = data.get('location')
+            availability = data.get('availability')
+            
+            if not deliveryVolunteerName or not phone or not location or not availability:
+                logging.error(f"Failed to register delivery volunteer: {user.uid} due to incomplete info.")
+            else: 
+                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, phone, location, availability)
+ 
+                if not(res):
+                    logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
+
         logging.info('User registered successfully with roles.')
+        
         return jsonify({"message": "User registered successfully", "userId": user.uid}), 201
     except Exception as e:
         logging.error(f"Failed to register user: {e}")
@@ -356,8 +375,8 @@ def getMessage():
     
     return "OK", 200  # Ensure valid response is always returned
     
-# Start the server
+# Start the serverr
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)))
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)), debug=True)
 
 
