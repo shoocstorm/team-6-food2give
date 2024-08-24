@@ -24,7 +24,7 @@ from beneficiary import *
 # Initialize Flask server
 server = Flask(__name__)
 
-TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
+TELEGRAM_API_TOKEN= os.getenv("TELEGRAM_API_TOKEN")
 ONE_MAP_TOKEN = os.getenv("ONE_MAP_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
 onemap = OneMap(ONE_MAP_TOKEN)
@@ -41,6 +41,7 @@ cred = credentials.Certificate('settings.json')
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'ms-cfg.appspot.com',
     'databaseURL': os.getenv("DATABASE_URL")
+   
 })
 bucket = storage.bucket()
 
