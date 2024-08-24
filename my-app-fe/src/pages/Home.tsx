@@ -3,8 +3,18 @@ import { Typography, Button, Box } from '@mui/material';
 import Header from '../parts/Header'; // Import Header component
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import '../assets/css/home.css';
+import { useNavigate } from 'react-router-dom'; 
+
+
 
 const Home: React.FC = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleMenuItemClick = (route: string) => {
+    navigate(route); // Navigate to the specified route
+    // If you have a drawer or any other UI element to close, you can manage it here
+    // setDrawerOpen(false); // Example: Close drawer after navigation
+  };
   return (
     <>
       <Header title="Food Hero" />
@@ -28,11 +38,13 @@ const Home: React.FC = () => {
         </Typography>
       <div className="flex flex-row gap-4">
         <Button variant="contained" className="home-button" sx={{backgroundColor:"green.400",color:'white', fontWeight:'600'}} 
-        endIcon={<ChevronRightIcon />}>
+        endIcon={<ChevronRightIcon />}
+        onClick={() => handleMenuItemClick('/join')}>
           Sign up
         </Button>
         <Button variant="contained" className="home-button" sx={{backgroundColor:"green.400",color:'white', fontWeight:'600'}} 
-        endIcon={<ChevronRightIcon />}>
+        endIcon={<ChevronRightIcon />}
+        onClick={() => handleMenuItemClick('/login')}>
           Login
         </Button>
       </div>
