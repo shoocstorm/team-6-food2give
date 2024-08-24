@@ -44,7 +44,7 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
     <>
       {viewMode === FoodPostingViewMode.FORM ? (
         <div className="flex flex-row justify-between items-center">
-          <Typography variant="h6">Check terms and conditions</Typography>
+          <Typography variant="h6">Confirm Posting</Typography>
           <IconButton
             onClick={() => {
               onClose();
@@ -56,7 +56,7 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
         </div>
       ) : (
         <div className="flex flex-row justify-between items-center">
-          <Typography variant="h6">{`Thanks for donating ${formState}!`}</Typography>
+          <Typography variant="h6">{`Thanks for donating ${formState.name}!`}</Typography>
           <IconButton onClick={onClose}>
             <CloseOutlined />
           </IconButton>
@@ -74,11 +74,21 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
       <Typography variant="h5" gutterBottom>
         {formState.name || "No Name Provided"}
       </Typography>
-      <Chip
-        sx={{ borderRadius: 0 }}
-        label={`x ${formState.numOfMeals ?? 0} meal(s)`}
-        className="mb-4"
-      />
+      {viewMode === FoodPostingViewMode.FORM ? (
+        <Chip
+          sx={{ borderRadius: 0 }}
+          label={`x ${formState.numOfMeals ?? 0} meal(s)`}
+          className="mb-4"
+        />
+      ) : (
+        <Chip
+          sx={{ borderRadius: 0 }}
+          label={`${(formState as FoodPostingViewModel).numMealsTaken}/${
+            (formState as FoodPostingViewModel).numOfMeals ?? 0
+          } meal(s) taken`}
+          className="mb-4"
+        />
+      )}
       <Stack direction="row" sx={{ mb: 1 }} flexWrap="wrap">
         {formState.tags.map((tag, index) => (
           <Chip

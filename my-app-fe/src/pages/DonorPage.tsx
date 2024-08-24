@@ -48,7 +48,28 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
     const fetchData = async () => {
       const data: FoodPostingProps[] = await getFoodPosting(donorId);
 
-      setFoodDonations(data);
+      setFoodDonations(
+        data.map((don: FoodPostingProps) => ({
+          foodPosting: {
+            ...don.foodPosting,
+            numMealsTaken: 10,
+            requests: [
+              {
+                orderId: "ord1",
+                beneficiaryName: "Woodlands Community Care Centre",
+                numOfMealsRequested: 2,
+                subtitles: ["Driver 5 mins away..."],
+              },
+              {
+                orderId: "ord2",
+                beneficiaryName: "Woodlands FSC",
+                numOfMealsRequested: 2,
+                subtitles: ["Finding driver..."],
+              },
+            ],
+          },
+        }))
+      );
     };
 
     if (!isAddModalOpen) {
@@ -62,7 +83,7 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
       <div className="breadcrumbs">
         {generateBreadcrumbs(["Donor", "Homepage"], ["/"])}
       </div>
-      <Card raised className="container-box" >
+      <Card raised className="container-box">
         <div className="flex justify-between items-center">
           <Typography variant="h4" fontWeight="semibold">
             My donations

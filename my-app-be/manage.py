@@ -20,9 +20,12 @@ from delivery_volunteer import *
 from storage_volunteer import *
 from donor import *
 from beneficiary import *
+from dotenv import load_dotenv
 
 # Initialize Flask server
 server = Flask(__name__)
+
+load_dotenv()
 
 TELEGRAM_API_TOKEN= os.getenv("TELEGRAM_API_TOKEN")
 ONE_MAP_TOKEN = os.getenv("ONE_MAP_TOKEN")
