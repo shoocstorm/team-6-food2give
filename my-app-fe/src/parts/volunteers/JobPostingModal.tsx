@@ -83,6 +83,10 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
                 </Box>
               </Box>
             </Stack>
+            {
+              orderAssigned ?
+              <Button variant="contained" size="large" onClick={onAccept} color="success">Finish Order</Button> : null 
+            }
             {orderAssigned ? 
               <Button variant="contained" size="large" onClick={onAccept} color="error">Cancel Order</Button> : 
               <Button variant="contained" size="large" onClick={onAccept}>Accept Order</Button>
