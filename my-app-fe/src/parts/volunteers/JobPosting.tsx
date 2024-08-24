@@ -17,7 +17,7 @@ const JobPosting: React.FC<JobPostingProps> = ({} : JobPostingProps) => {
           />
         <LinearProgress variant="determinate" value={50}/>
         <Stack spacing={2} style={{textAlign: "left", margin: "10px"}}>
-          <Typography variant="body1">time to origin: 5 mins</Typography>
+          <Typography variant="body1">time to restaurant: 5 mins</Typography>
           <Typography variant="body1">delivery time: 23 mins</Typography>
           <Typography variant="body1">Estimated delivery time: 23 mins</Typography>
         </Stack>

@@ -186,7 +186,7 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
       <div className="breadcrumbs">
         {generateBreadcrumbs(["Donor", "Homepage"], ["/"])}
       </div>
-      <Card raised className="container-box">
+      <Card raised className="container-box" >
         <div className="flex justify-between items-center">
           <Typography variant="h4" fontWeight="semibold">
             My donations

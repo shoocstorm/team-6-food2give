@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import Header from '../parts/Header'; // Import Header component
 import '../assets/css/home.css';
 import JobPosting from '../parts/volunteers/JobPosting';
@@ -13,6 +13,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
     <>
     <Header title={`Welcome, ${volunteerId}!`} />
     <div style={{margin: "20px 0px"}}>
+      <Container className="container-box" >
       <Grid container spacing={3}>
         <Grid item xs={4}>
           <JobPosting/>
@@ -27,6 +28,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
           <JobPosting/>
         </Grid>
       </Grid>
+      </Container>
       </div>
 
     </>
