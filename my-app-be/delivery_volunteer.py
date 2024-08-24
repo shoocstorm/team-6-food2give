@@ -5,8 +5,8 @@ ROUTE_PREFIX = "delivery_volunteer"
 delivery_volunteer_routes = Blueprint('delivery_volunteer_routes', __name__)
 
 def register_delivery_volunteer(deliveryVolunteerId, deliveryVolunteerName,
-                                email, phone, location, availableFrom, availableTo):
-  if "" in [deliveryVolunteerId, deliveryVolunteerName, phone, location]:
+                                email, phone, address, postalCode, availableFrom, availableTo):
+  if "" in [deliveryVolunteerId, deliveryVolunteerName, phone, address, postalCode]:
     return False
   
   ref = db.reference("delivery-volunteers")
@@ -15,7 +15,8 @@ def register_delivery_volunteer(deliveryVolunteerId, deliveryVolunteerName,
     "deliveryVolunteerName": deliveryVolunteerName,
     "email": email,
     "phone": phone,
-    "location": location,
+    "address": address,
+    "postalCode": postalCode,
     "availableFrom": availableFrom,
     "availableTo": availableTo,
 
