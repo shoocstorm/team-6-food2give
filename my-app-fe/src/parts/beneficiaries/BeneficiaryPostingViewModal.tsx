@@ -4,24 +4,31 @@ import dayjs from "dayjs";
 import FoodPostingView, {
   FoodPostingViewMode,
   FoodPostingViewModel,
-} from "./FoodPostingView";
+} from "../donors/FoodPostingView";
 import ProgressBar from "../components/ProgressBar";
 import { AccessTimeOutlined, CheckOutlined } from "@mui/icons-material";
 import BeneficiaryOrderRequestCard, {
   BeneficiaryOrderRequestCardProps,
-} from "./BeneficiaryOrderRequestCard";
+} from "../donors/BeneficiaryOrderRequestCard";
+import { BeneficiaryViewModel } from "./BeneficiaryPosting";
+import BeneficiaryPostingView from "./BeneficiaryPostingView";
+import DeliveryCard from "./card/DeliveryCard";
+import ListedStorageCard from "./card/ListedStorageCard"
+import NotAcquiredCard from "./card/NotAcquiredCard";
 
-export interface FoodPostingViewModalProps {
-  foodPosting: FoodPostingViewModel;
+export interface BeneficiaryPostingViewModalProps {
+  beneficiaryPosting: BeneficiaryViewModel;
   isModalOpen: boolean;
   onClose: () => void;
 }
 
-const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
-  foodPosting,
+const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = ({
+  beneficiaryPosting,
   isModalOpen,
   onClose,
-}: FoodPostingViewModalProps) => {
+}: BeneficiaryPostingViewModalProps) => {
+  const foodPosting = beneficiaryPosting.foodPosting;
+  const status = beneficiaryPosting.status;
   let frac =
     1 -
     (foodPosting.consumeBy!.unix() - dayjs().unix()) /
@@ -46,20 +53,18 @@ const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
           overflowY: "scroll",
         }}
       >
-        <FoodPostingView
+        <BeneficiaryPostingView
           formState={foodPosting}
           onClose={onClose}
           viewMode={FoodPostingViewMode.MATCHING}
         />
-        <br />
-        <br />
         <Tooltip title="Meals given out" arrow>
           <div className="flex flex-row justify-between items-center gap-2">
             <div className="grow">
               <ProgressBar
                 fraction={
-                  ((foodPosting as FoodPostingViewModel).numMealsTaken ?? 0) /
-                  foodPosting.numOfMeals
+                  (foodPosting as FoodPostingViewModel).numMealsTaken ??
+                  0 / foodPosting.numOfMeals
                 }
               />
             </div>
@@ -74,15 +79,33 @@ const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
             <AccessTimeOutlined color="primary" />
           </div>
         </Tooltip>
-        <br />
-        {foodPosting.requests?.map(
-          (req: BeneficiaryOrderRequestCardProps, idx: number) => (
-            <BeneficiaryOrderRequestCard {...req} key={idx} />
-          )
+        {status === "Delivering" && (
+          <DeliveryCard
+            driverName={beneficiaryPosting.driverName!}
+            donorLocation={beneficiaryPosting.donorLocation}
+            numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
+          />
+        )}
+        {status === "Listed" && (
+          <ListedStorageCard
+            storageVolunteerName={beneficiaryPosting.storageVolunteerName!}
+            donorLocation={beneficiaryPosting.donorLocation}
+            numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
+          />
+        )}
+        {status === "Not acquired" &&(
+          <NotAcquiredCard
+            donorId={beneficiaryPosting.donorId!}
+            donorLocation={beneficiaryPosting.donorLocation}
+            numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
+          />
         )}
       </Box>
     </Modal>
   );
 };
 
-export default FoodPostingViewModal;
+export default BeneficiaryPostingViewModal;

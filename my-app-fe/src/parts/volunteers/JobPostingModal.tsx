@@ -20,7 +20,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
   onFinish,
   onCancel
 }) => {
-  const {orderId, 
+  const {
+    orderId, 
     pickupInstructions, 
     timeToExpiry, 
     tripDuration, 

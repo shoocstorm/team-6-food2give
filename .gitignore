@@ -12,10 +12,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # Ignore environment files
+.venv/
 .env
 .env.*
 /my-app-fe/.env.local
 /my-app-be/.env.local
+.venv/
 
 # Ignore build folders
 /my-app-fe/build/
@@ -27,5 +29,8 @@ yarn-error.log*
 
 # MacOS specific
 .DS_Store
+
+# Python specific
+venv
 
 /**/*/*.pyc

@@ -20,11 +20,14 @@ from delivery_volunteer import *
 from storage_volunteer import *
 from donor import *
 from beneficiary import *
+from dotenv import load_dotenv
 
 # Initialize Flask server
 server = Flask(__name__)
 
-TELEGRAM_API_TOKEN="7364529459:AAGcLtCPPO-m70xDMtZ7WYuYk1Ssokj1iLw"#os.getenv("TELEGRAM_API_TOKEN")
+load_dotenv()
+
+TELEGRAM_API_TOKEN= os.getenv("TELEGRAM_API_TOKEN")
 ONE_MAP_TOKEN = os.getenv("ONE_MAP_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN, threaded=False)
 onemap = OneMap(ONE_MAP_TOKEN)
@@ -41,6 +44,7 @@ cred = credentials.Certificate('settings.json')
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'ms-cfg.appspot.com',
     'databaseURL': os.getenv("DATABASE_URL")
+   
 })
 bucket = storage.bucket()
 
@@ -179,10 +183,13 @@ def register_user():
 
         # Store user roles in Firebase Realtime Database
         user_ref = db.reference(f'users/{user.uid}')
+        user_id = user_ref.key
         user_ref.set({
+            'userId': user_id,
             'email': email,
             'roles': roles,
-            'createdAt': datetime.datetime.now().isoformat()
+            'createdAt': datetime.datetime.now().isoformat(),
+            'points': 0
         })
 
         # if delivery_volunteer is in roles we register them in /deliveryvolunteer reference
@@ -190,14 +197,15 @@ def register_user():
         if "deliveryvolunteer" in roles:
             deliveryVolunteerName = data.get('name')
             phone = data.get('phone')
-            location = data.get('location')
+            address = data.get('address')
+            postalCode = data.get('postalCode')
             availableFrom = data.get('availableFrom')
             availableTo = data.get('availableTo')
             
-            if not deliveryVolunteerName or not phone or not location or not availableFrom or not availableTo:
+            if not deliveryVolunteerName or not phone or not address or not postalCode or not availableFrom or not availableTo:
                 logging.error(f"Failed to register delivery volunteer: {user.uid} due to incomplete info.")
             else: 
-                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, phone, location, availableFrom, availableTo)
+                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, phone, address, postalCode, availableFrom, availableTo)
  
                 if not(res):
                     logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
@@ -205,29 +213,31 @@ def register_user():
         if "storagevolunteer" in roles:
             storageVolunteerName = data.get('name')
             phone = data.get('phone')
-            location = data.get('location')
+            address = data.get('address')
+            postalCode = data.get('postalCode')
             availableFrom = data.get('availableFrom')
             availableTo = data.get('availableTo')
             storageCapacity = data.get('storageCapacity')
             
-            if not storageVolunteerName or not phone or not location or not availableFrom or not availableTo or not storageCapacity:
+            if not storageVolunteerName or not phone or not address or not postalCode or not availableFrom or not availableTo or not storageCapacity:
                 logging.error(f"Failed to register storage volunteer: {user.uid} due to incomplete info.")
             else: 
-                res = register_storage_volunteer(user.uid, storageVolunteerName, email, phone, location, availableFrom, availableTo, storageCapacity)
+                res = register_storage_volunteer(user.uid, storageVolunteerName, email, phone, address, postalCode, availableFrom, availableTo, storageCapacity)
  
                 if not(res):
                     logging.error(f"Failed to register storage volunteer: {user.uid} due to incompleted info2.")
         if "donor" in roles:
             donorName = data.get('name')
             phone = data.get('phone')
-            location = data.get('location')
+            address = data.get('address')
+            postalCode = data.get('postalCode')
             email = data.get('email')
             organisationName = data.get('organisationName')
             
-            if not donorName or not phone or not location or not email or not organisationName:
+            if not donorName or not phone or not address or not postalCode or not email or not organisationName:
                 logging.error(f"Failed to register donor: {user.uid} due to incomplete info.")
             else: 
-                res = register_donor(user.uid, donorName, email, location, phone, organisationName)
+                res = register_donor(user.uid, donorName, email, address, postalCode, phone, organisationName)
             
  
                 if not(res):
@@ -236,14 +246,15 @@ def register_user():
         if "beneficiary" in roles:
             beneficiaryName = data.get('name')
             phone = data.get('phone')
-            location = data.get('location')
+            address = data.get('address')
+            postalCode = data.get('postalCode')
             email = data.get('email')
             contactPerson = data.get('contactPerson')
             
-            if not beneficiaryName or not phone or not location or not email or not contactPerson:
+            if not beneficiaryName or not phone or not address or not postalCode or not email or not contactPerson:
                 logging.error(f"Failed to register beneficiary: {user.uid} due to incomplete info.")
             else: 
-                res = register_beneficiary(user.uid, beneficiaryName, email, location, phone, contactPerson)
+                res = register_beneficiary(user.uid, beneficiaryName, email, address, postalCode, phone, contactPerson)
             
  
                 if not(res):
@@ -404,25 +415,24 @@ def get_current_user():
         logging.error(f"Failed to retrieve current user: {e}")
         return jsonify({"error": "Invalid token or user not authenticated"}), 401
 
+@server.route('/get-points', methods=['GET'])
+def get_user_points():
+    try:
+        data = request.get_json()
+        userid = data.get('userId')
 
-#dont use yet
-# @server.route('/get-points', methods=['GET'])
-# def get_user_points():
-#     try:
-#         data = request.get_json()
-#         userid = data.get('userId')
-
-#         if not userid:
-#             return jsonify({"error": "userId parameter is required"}), 400
+        if not userid:
+            return jsonify({"error": "userId parameter is required"}), 400
         
-#         ref = db.reference(f'users/{userid}')
+        ref = db.reference(f'users/{userid}')
 
-#         user_points = ref.get('points',0)
+        user_data = ref.get()
+        user_points = user_data.get('points', 0)
 
-#         logging.info('User points retrieved successfully.')
-#         return jsonify(user_points), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+        logging.info('User points retrieved successfully.')
+        return jsonify(user_points), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
 # BOT STUFF
 @bot.message_handler(commands=['attach'])

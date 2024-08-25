@@ -12,8 +12,6 @@ export default interface jobPosting {
   timeToExpiry: number
 }
 
-
-
 export const emptyJobPosting = () => ({
   orderId: "",
   foodPostingId: "",
