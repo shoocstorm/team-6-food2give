@@ -49,6 +49,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     driverId: 1,
     driverName: "Driver1",
     status: "Not acquired",
+    location: "Ang mokio"
   },
   {
     foodPosting: {
@@ -76,7 +77,8 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     donorLocation: "Location1",
     status: "Listed",
     storageVolunteerName:"Loh Chee Keng",
-    storageVolunteerId: 1
+    storageVolunteerId: 1,
+    location: "119 Buona Vista"
   },
   {
     foodPosting: {
@@ -103,6 +105,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     donorId: "donor1",
     donorLocation: "Location1",
     status: "Listed",
+    location: "39 Dover road",
     storageVolunteerName:"Loh Chee Keng",
     storageVolunteerId: 1
   },

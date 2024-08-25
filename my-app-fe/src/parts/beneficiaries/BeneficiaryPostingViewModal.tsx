@@ -97,6 +97,7 @@ const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = 
         )}
         {status === "Not acquired" &&(
           <NotAcquiredCard
+            beneficiaryPosting={beneficiaryPosting}
             donorId={beneficiaryPosting.donorId!}
             donorLocation={beneficiaryPosting.donorLocation}
             numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
