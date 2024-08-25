@@ -209,7 +209,7 @@ def register_user():
             if not deliveryVolunteerName or not address or not postalCode or not availableFrom or not availableTo:
                 logging.error(f"Failed to register delivery volunteer: {user.uid} due to incomplete info.")
             else: 
-                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, address, postalCode, availableFrom, availableTo)
+                res = register_delivery_volunteer(deliveryVolunteerId=user.uid, deliveryVolunteerName=deliveryVolunteerName, email=email, address=address, postalCode=postalCode, availableFrom=availableFrom, availableTo=availableTo)
  
                 if not(res):
                     logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
@@ -226,7 +226,7 @@ def register_user():
             if not storageVolunteerName or not phone or not address or not postalCode or not availableFrom or not availableTo or not storageCapacity:
                 logging.error(f"Failed to register storage volunteer: {user.uid} due to incomplete info.")
             else: 
-                res = register_storage_volunteer(user.uid, storageVolunteerName, email, phone, address, postalCode, availableFrom, availableTo, storageCapacity)
+                res = register_storage_volunteer(storageVolunteerId=user.uid, storageVolunteerName=storageVolunteerName, email=email, phone=phone, address=address, postalCode=postalCode, availableFrom=availableFrom, availableTo=availableTo, storageCapacity=storageCapacity)
  
                 if not(res):
                     logging.error(f"Failed to register storage volunteer: {user.uid} due to incompleted info2.")
@@ -241,7 +241,7 @@ def register_user():
             if not donorName or not phone or not address or not postalCode or not email or not organisationName:
                 logging.error(f"Failed to register donor: {user.uid} due to incomplete info.")
             else: 
-                res = register_donor(user.uid, donorName, email, address, postalCode, phone, organisationName)
+                res = register_donor(donorId=user.uid, donorName=donorName, email=email, address=address, postalCode=postalCode, phone=phone, organisationName=organisationName)
             
  
                 if not(res):
@@ -258,7 +258,7 @@ def register_user():
             if not beneficiaryName or not phone or not address or not postalCode or not email or not contactPerson:
                 logging.error(f"Failed to register beneficiary: {user.uid} due to incomplete info.")
             else: 
-                res = register_beneficiary(user.uid, beneficiaryName, email, address, postalCode, phone, contactPerson)
+                res = register_beneficiary(beneficiaryId=user.uid, beneficiaryName=beneficiaryName, email=email, address=address, postalCode=postalCode, phone=phone, contactPerson=contactPerson)
             
  
                 if not(res):
