@@ -18,6 +18,8 @@ import LoginPage from "./parts/register/LoginPage";
 import BAHomePage from "./pages/BAHomePage";
 import BADonations from "./pages/BADonationsPage";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthProvider";
 
 // extending the Palette interface to include a custom color green in the theme
 declare module "@mui/material/styles" {

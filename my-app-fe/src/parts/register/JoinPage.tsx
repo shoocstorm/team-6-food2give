@@ -59,7 +59,7 @@ const JoinPage: React.FC = () => {
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5001/register', { 
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/register`, { 
             ...formData, 
             roles: [selectedRole.toLowerCase().replace(" ", "")] 
         });
