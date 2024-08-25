@@ -15,7 +15,9 @@ export type BeneficiaryViewModel = {
   donorId: string;
   donorLocation: string;
   driverName?: string;
-  driverId?: string;
+  driverId?: number;
+  storageVolunteerName?: string;
+  storageVolunteerId?: number;
   // Note delivering is delivering to beneficiary, listed is listed for beneficiaries to request for storage space,
   // & Not acquired is for food listed by donors but not acquired by any beneficiaries yet
   status: "Delivering" | "Listed" | "Not acquired";

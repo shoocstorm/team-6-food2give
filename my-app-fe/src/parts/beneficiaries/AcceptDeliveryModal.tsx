@@ -6,17 +6,21 @@ export interface AcceptOrderModalProps {
   isModalOpen: boolean;
   onClose: () => void;
   onAccept: () => void;
+  status: string;
 }
 
 const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
   isModalOpen,
   onClose,
   onAccept,
+  status,
 }: AcceptOrderModalProps) => {
     const handleSubmit = () => {
         onAccept();
         onClose();
     }
+    const caption = status === "Delivering"? "delivery": "order"
+    
   return (
     <Modal open={isModalOpen} onClose={onClose} className="m-4 overflow-scroll">
       <Box
@@ -36,7 +40,7 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
         }}
       >
         <h1 className="text-white">
-            Are you sure you want to accept this delivery?
+            Are you sure you want to accept this {caption}?
         </h1>
         <Button
         variant="contained"

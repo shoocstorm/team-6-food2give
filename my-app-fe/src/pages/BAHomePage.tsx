@@ -45,7 +45,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     },
     donorId: "donor1",
     donorLocation: "Location1",
-    driverId: "driver1",
+    driverId: 1,
     driverName: "Driver1",
     status: "Delivering",
   },
@@ -53,7 +53,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     foodPosting: {
       orderId: "ord1",
       name: "Chicken Rice",
-      numOfMeals: 20,
+      numOfMeals: 10,
       preparedAt: dayjs("22 August 2024 14:20"),
       consumeBy: dayjs("22 August 2024 18:20"),
       tags: ["halal", "soy"],
@@ -74,6 +74,8 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     donorId: "donor1",
     donorLocation: "Location1",
     status: "Listed",
+    storageVolunteerName:"Loh Chee Keng",
+    storageVolunteerId: 1
   },
 ];
 

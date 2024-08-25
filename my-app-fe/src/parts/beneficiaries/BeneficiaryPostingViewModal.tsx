@@ -12,7 +12,9 @@ import BeneficiaryOrderRequestCard, {
 } from "../donors/BeneficiaryOrderRequestCard";
 import { BeneficiaryViewModel } from "./BeneficiaryPosting";
 import BeneficiaryPostingView from "./BeneficiaryPostingView";
-import DeliveryCard from "./DeliveryCard";
+import DeliveryCard from "./card/DeliveryCard";
+import ListedStorageCard from "./card/ListedStorageCard"
+import NotAcquiredCard from "./card/NotAcquiredCard";
 
 export interface BeneficiaryPostingViewModalProps {
   beneficiaryPosting: BeneficiaryViewModel;
@@ -82,6 +84,23 @@ const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = 
             driverName={beneficiaryPosting.driverName!}
             donorLocation={beneficiaryPosting.donorLocation}
             numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
+          />
+        )}
+        {status === "Listed" && (
+          <ListedStorageCard
+            storageVolunteerName={beneficiaryPosting.storageVolunteerName!}
+            donorLocation={beneficiaryPosting.donorLocation}
+            numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
+          />
+        )}
+        {status === "Not acquired" &&(
+          <NotAcquiredCard
+            donorId={beneficiaryPosting.donorId!}
+            donorLocation={beneficiaryPosting.donorLocation}
+            numOfMealsRequested={beneficiaryPosting.foodPosting.numOfMeals!}
+            status={status}
           />
         )}
       </Box>
