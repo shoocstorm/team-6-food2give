@@ -64,3 +64,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 4. set `my-app-be/settings.json` to the file vanessa sent in the chat (alternatively generate your own `settings.json` by creating a new public key in firebase console)
 5. create a .env file and place the environment variables sent in `team6` chat
 6. run `dotenv run -- python manage.py`
+
+To run the server, use locally run server and generate a key from the firebase and get the `settings.json` or contact our member for the .env and settings.json file
+1. Go to project settings in Firebase and generate the settings.json
+
+Deployed server: the server is deployed using Docker and to the google cloud. Can run `docker build` and `docker run` 
