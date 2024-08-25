@@ -16,6 +16,7 @@ yarn-error.log*
 .env.*
 /my-app-fe/.env.local
 /my-app-be/.env.local
+.venv/
 
 # Ignore build folders
 /my-app-fe/build/
