@@ -7,6 +7,7 @@ export interface AcceptOrderModalProps {
   onClose: () => void;
   onAccept: () => void;
   status: string;
+  orderCount?: number;
 }
 
 const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
@@ -14,13 +15,21 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
   onClose,
   onAccept,
   status,
+  orderCount,
 }: AcceptOrderModalProps) => {
     const handleSubmit = () => {
         onAccept();
         onClose();
     }
-    const caption = status === "Delivering"? "delivery": "order"
-    
+    const handleCancel = () => {
+        onClose();
+    }
+    const caption = status === "Delivering" 
+    ? "Are you sure you want to accept this delivery?" 
+    : status === "Listed" 
+    ? "Are you sure you want to accept this order?" 
+    : `Are you sure you want to order ${orderCount || 0} boxes?`; // Default to 0 if orderCount is undefined
+
   return (
     <Modal open={isModalOpen} onClose={onClose} className="m-4 overflow-scroll">
       <Box
@@ -39,8 +48,9 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
           overflowY: "scroll",
         }}
       >
+       
         <h1 className="text-white">
-            Are you sure you want to accept this {caption}?
+            {caption}
         </h1>
         <Button
         variant="contained"
@@ -49,7 +59,21 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
         fullWidth
         sx={{ marginTop: "10px" }}
       >
-        Accept
+        Yes
+      </Button>
+      <Button
+        variant="contained"
+        onClick={handleCancel}
+        fullWidth
+        sx={{
+            marginTop: "10px",
+            backgroundColor: 'rgb(239 68 68)', // Tailwind's red-500
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'rgb(220 38 38)', // Tailwind's red-600 for hover
+            },
+          }}      >
+        Cancel
       </Button>
       </Box>
     </Modal>

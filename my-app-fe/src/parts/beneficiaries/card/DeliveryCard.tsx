@@ -3,6 +3,7 @@ import { Button, Card, Typography } from "@mui/material";
 import AcceptDeliveryModal from "../AcceptDeliveryModal";
 import { useState } from "react";
 
+
 export interface BeneficiaryDeliveryCardProps {
   driverName: string;
   donorLocation: string;
@@ -24,6 +25,7 @@ const DeliveryCard: React.FC<BeneficiaryDeliveryCardProps> = ({
           <Typography variant="subtitle1"> {driverName} has reached</Typography>
         </div>
         <Typography fontWeight="bold">{`${numOfMealsRequested} meals to be delivered`}</Typography>
+        
         <Button
           variant="outlined"
           className="!mt-2 w-full"

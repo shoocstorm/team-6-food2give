@@ -24,7 +24,7 @@ const SECTIONS = ["Home", "Find Donations"]
 const DUMMY_CARDS: BeneficiaryViewModel[] = [
   {
     foodPosting: {
-      orderId: "ord1",
+      orderId: "ord3",
       name: "Mee Rebus",
       numOfMeals: 20,
       preparedAt: dayjs("22 August 2024 14:20"),
@@ -52,7 +52,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
   },
   {
     foodPosting: {
-      orderId: "ord2",
+      orderId: "ord4",
       name: "Fried Rice",
       numOfMeals: 10,
       preparedAt: dayjs("22 August 2024 14:20"),
@@ -80,7 +80,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
   },
   {
     foodPosting: {
-      orderId: "ord2",
+      orderId: "ord5",
       name: "Bento",
       numOfMeals: 10,
       preparedAt: dayjs("22 August 2024 14:20"),
