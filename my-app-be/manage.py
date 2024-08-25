@@ -354,12 +354,11 @@ def add_order():
                     email_ref = db.reference('emails')
                     print(email_ref.get())
                     chat_id = email_ref.child(encoded_email).get().strip()
-                    print(f"chat id email {encoded_email}\n\n {chat_id}\n")
                     if chat_id:
                         logging.info(f'Sending notification to {email} (chat_id: {chat_id})')
-                        
+                        logging.info(f"There is a new food posting added! 🍚😋😋\nFrom: {data['originLocation']['address']}\nTo: {data['destinationLocation']['address']}\nIt looks like it'll take 30 minutes to get to your location!\nIf you could help with combating food insecurity, we would love for your help in delivering it, thank you! 😊\n\n**FoodBank Singapore**")
                         # Send notification to the chat_id
-                        bot.send_message(chat_id, f"Food request volunteer added\n From: {data['originLocation']['address']}\n To: {data['destinationLocation']['address']} \nFrom our algorithm: it seems you might have the time to take... Check it out!")
+                        bot.send_message(chat_id, f"There is a new food posting added! 🍚😋😋\nFrom: {data['originLocation']['address']}\nTo: {data['destinationLocation']['address']}\nIt looks like it'll take 30 minutes to get to your location!\nIf you could help with combating food insecurity, we would love for your help in delivering it, thank you! 😊\n\n**FoodBank Singapore**", parse_mode='Markdown')
                 except Exception as e:
                     logging.error(f"Failed to send message {e}")
                     continue
