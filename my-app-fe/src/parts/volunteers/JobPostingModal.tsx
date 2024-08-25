@@ -8,6 +8,8 @@ interface JobPostingModalProps {
   open: boolean,
   onClose: () => void,
   onAccept: () => void
+  onFinish: () => void
+  onCancel: () => void
 }
 
 const JobPostingModal: React.FC<JobPostingModalProps> = ({
@@ -15,6 +17,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
   open,
   onClose,
   onAccept,
+  onFinish,
+  onCancel
 }) => {
   const {
     orderId, 
@@ -24,7 +28,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
     donorLocation,
     destinationId,
     numberOfMeals,
-    orderAssigned
+    orderAssigned,
+    previewImage
   } = jobPosting
   return (
     <Modal open={open} onClose={onClose} className="m-4 overflow-scroll">
@@ -46,8 +51,9 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
             <CardMedia
                 component="img"
                 height="140"
-                image="https://i.pinimg.com/564x/4e/89/61/4e896119923bb3b72823e5dc6657abb6.jpg"
+                image={previewImage}
                 alt="Placeholder image"
+                sx={{ height: 300 }}
               />
             <Stack spacing={1} style={{textAlign: "left", margin: "10px"}}>
               <Box>
@@ -64,7 +70,7 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
                   <strong>Delivery point:</strong> {destinationId}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Number of Meals:</strong> {}
+                  <strong>Number of Meals:</strong> {numberOfMeals}
                 </Typography>
 
                 <Typography variant="body1">
@@ -86,10 +92,10 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
             </Stack>
             {
               orderAssigned ?
-              <Button variant="contained" size="large" onClick={onAccept} color="success">Finish Order</Button> : null 
+              <Button variant="contained" size="large" onClick={onFinish} color="success">Finish Order</Button> : null 
             }
             {orderAssigned ? 
-              <Button variant="contained" size="large" onClick={onAccept} color="error">Cancel Order</Button> : 
+              <Button variant="contained" size="large" onClick={onCancel} color="error">Cancel Order</Button> : 
               <Button variant="contained" size="large" onClick={onAccept}>Accept Order</Button>
             }
         </Stack>
