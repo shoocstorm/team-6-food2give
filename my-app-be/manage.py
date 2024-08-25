@@ -1,4 +1,5 @@
 import base64
+import json
 import os
 import logging
 from flask import Flask, request, jsonify
@@ -14,6 +15,10 @@ import telebot
 from telebot import types
 from flask_cors import CORS
 import urllib.parse
+import openai
+
+OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 
 from delivery_volunteer import *
@@ -55,14 +60,14 @@ logger = logging.getLogger(__name__)
 @server.route('/add-food', methods=['POST'])
 def add_food_posting():
     image_file = request.files.get('image')
-    if not image_file:
-        return jsonify({"error": "Missing image file"}), 400
-    # Save image to Firebase Storage
-    blob = bucket.blob(f"images/{image_file.filename}")
-    blob.upload_from_file(image_file)
-    blob.make_public()
-    
-    image = blob.public_url
+    if image_file:
+     
+        # Save image to Firebase Storage
+        blob = bucket.blob(f"images/{image_file.filename}")
+        blob.upload_from_file(image_file)
+        blob.make_public()
+        
+        image = blob.public_url
     
     try:
         data = request.form.to_dict()
@@ -74,7 +79,8 @@ def add_food_posting():
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
         ref = db.reference(f'food_postings')
-        data['image'] = image
+        if image_file:
+            data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
         new_post_ref.update({ "donorListingId": post_id }) 
@@ -196,16 +202,15 @@ def register_user():
         
         if "deliveryvolunteer" in roles:
             deliveryVolunteerName = data.get('name')
-            phone = data.get('phone')
             address = data.get('address')
             postalCode = data.get('postalCode')
             availableFrom = data.get('availableFrom')
             availableTo = data.get('availableTo')
-            
-            if not deliveryVolunteerName or not phone or not address or not postalCode or not availableFrom or not availableTo:
+            print(f'\n\n{data}\n\n')
+            if not deliveryVolunteerName or not address or not postalCode or not availableFrom or not availableTo:
                 logging.error(f"Failed to register delivery volunteer: {user.uid} due to incomplete info.")
             else: 
-                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, phone, address, postalCode, availableFrom, availableTo)
+                res = register_delivery_volunteer(user.uid, deliveryVolunteerName, email, address, postalCode, availableFrom, availableTo)
  
                 if not(res):
                     logging.error(f"Failed to register delivery volunteer: {user.uid} due to incompleted info.")
@@ -311,10 +316,53 @@ def add_order():
         new_order_ref = ref.push(data)
         order_id = new_order_ref.key
         new_order_ref.update({"orderId": order_id, "assigned": False, "assignedTo": None, "status": "pending", "userId": user.uid})
-
+       
         # Retrieve the newly added order
         order_data = new_order_ref.get()
+        
+        dv_ref = db.reference('delivery-volunteers')
+        dv_data = dv_ref.get()
 
+        if dv_data:
+            user_message = get_best_order_message(dv_data, data['originLocation'], data['destinationLocation'], prepared_at_date)
+            print(f'\n\n{user_message}\n\n')
+            if not user_message:
+                return jsonify({"error": "Message field is required"}), 400
+            
+            client = openai.OpenAI(api_key=OPENAI_API_KEY)
+            # Call the OpenAI API
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "user", "content": user_message },
+                ],
+                response_format={"type": "json_object"},
+            )
+
+            # Extract and return the model's response
+            gpt_response = response.choices[0].message.content
+        
+            # Now we parse the gpt_response string into a JSON object
+            json_data = json.loads(gpt_response)
+            print(f"\n\nJSON DATA: {json_data}\n\m")
+            
+            # Send notification to each chat ID
+            for volunteer in json_data['volunteers']:
+                try:
+                    email = volunteer['email']
+                    encoded_email = base64.b64encode(email.encode()).decode()
+                    email_ref = db.reference('emails')
+                    print(email_ref.get())
+                    chat_id = email_ref.child(encoded_email).get().strip()
+                    print(f"chat id email {encoded_email}\n\n {chat_id}\n")
+                    if chat_id:
+                        logging.info(f'Sending notification to {email} (chat_id: {chat_id})')
+                        
+                        # Send notification to the chat_id
+                        bot.send_message(chat_id, f"Food request volunteer added\n From: {data['originLocation']['address']}\n To: {data['destinationLocation']['address']} \nFrom our algorithm: it seems you might have the time to take... Check it out!")
+                except Exception as e:
+                    logging.error(f"Failed to send message {e}")
+                    continue
         logging.info(f"Order added successfully with orderId: {order_id}")
         return jsonify(order_data), 201
     except Exception as e:
@@ -480,7 +528,41 @@ def getMessage():
         return jsonify({"error": "Failed to process update", "details": str(e)}), 500  # Handle exceptions with proper response
     
     return "OK", 200  # Ensure valid response is always returned
+
+def get_best_order_message(volunteers, orderFrom, orderTo, date):
+    msg = f"""
+    There is an order from {orderFrom} to {orderTo} on {date}.
     
+    Here are the volunteers:
+    
+    {volunteers}
+
+    Please filter the volunteers and return only those who are available to take the order based on their 'availableFrom' and 'availableTo' times. If no one is available, suggest any volunteer. The result should be formatted as an json of objects like this:
+
+    {{ "volunteers" :[
+      {{
+        "address": "xxx",
+        "availableFrom": "YYYY-MM-DDTHH:MM:SS.ZZZZ",
+        "availableTo": "YYYY-MM-DDTHH:MM:SS.ZZZZ",
+        "deliveryVolunteerId": "xxxx",
+        "deliveryVolunteerName": "xxxx",
+        "email": "xxxx@example.com",
+        "postalCode": "xxxxxx"
+      }},
+      {{
+        "address": "xxx",
+        "availableFrom": "YYYY-MM-DDTHH:MM:SS.ZZZZ",
+        "availableTo": "YYYY-MM-DDTHH:MM:SS.ZZZZ",
+        "deliveryVolunteerId": "xxxx",
+        "deliveryVolunteerName": "xxxx",
+        "email": "xxxx@example.com",
+        "postalCode": "xxxxxx"
+      }}
+    ]
+    }}
+    """
+    return msg
+
 # Start the serverr
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5001)), debug=True)

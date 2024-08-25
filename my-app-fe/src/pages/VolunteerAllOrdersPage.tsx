@@ -6,6 +6,8 @@ import JobPosting from '../parts/volunteers/JobPosting';
 import JobPostingModal from '../parts/volunteers/JobPostingModal';
 import jobPosting, { emptyJobPosting } from '../interfaces/JobPosting';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Profile from '../parts/components/Profile';
 
 interface VolunteerPageProps {
   volunteerId: string;
@@ -91,8 +93,42 @@ const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : 
   const [isOpen, setIsOpen] = useState(false)
   const [availableJobs, setAvailableJobs] = useState(availableJobPostings)
   const [currentJob, setCurrentJob] = useState(currentJobPosting)
+  const idToken = localStorage.getItem('idToken')
+  const userId = localStorage.getItem('userId')
 
-  const onAccept = () => {
+  const onAccept = async () => {
+    try {
+      const payload = {
+        originLocation: {
+          address: selectedJob.donorLocation,
+          postalCode: "987654", // Replace with actual data if available
+        },
+        destinationLocation: {
+          address: selectedJob.destinationId,
+          postalCode: "123987", // Replace with actual data if available
+        },
+        pointsAvailable: selectedJob.pointsEarned,
+        numberOfMeals: selectedJob.numberOfMeals,
+        donorListingId: selectedJob.foodPostingId,
+        userId: userId,
+      };
+      // Make a POST request to your backend to accept the order
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/orders/add`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        }
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Order accepted successfully:", response.data);
+        setIsOpen(false);
+        alert("SUCCESS")
+        // Optionally update the UI, for example, move the order from availableJobs to currentJob
+      }
+    } catch (error) {
+      console.error("Error accepting the order:", error);
+    }
     setCurrentJob({
       ...selectedJob,
       orderAssigned: true
@@ -112,9 +148,7 @@ const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : 
   return (
     <>
     <Header  />
-    <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
-            Welcome {volunteerId}!
-        </Typography>
+    <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg"/>
     <>
           <ul className="w-screen flex flex-row justify-around">
               {SECTIONS.map((section, idx) => {

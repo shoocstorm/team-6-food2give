@@ -4,6 +4,7 @@ import { Button, TextField, Box, Typography, Grid, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import foodDeliveryImage from '../../assets/img/foodBank.jpg';  
 import Header from '../../parts/Header';
+import { useAuth } from '../../context/AuthProvider';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,13 +15,14 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5001/login', {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/login`, {
             email,
             password,
         });
 
         console.log('Login successful:', response.data);
         localStorage.setItem('idToken', response.data.idToken);
+        localStorage.setItem('userId', response.data.userId);
 
         // Redirect to the rewards page or any other page
         navigate('/rewards');
