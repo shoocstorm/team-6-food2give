@@ -79,10 +79,11 @@ const BaPosting: React.FC<BaPostingProps> = (props) => {
                         <Typography variant="body2" color="text.secondary">
                             Quantity: {quantity}
                         </Typography>
-                        <br />
-                        {tags.map((tag: string, idx: number) => (
-                            <Chip key={idx} label={tag} sx={{ marginRight: "2px " }} />
-                        ))}
+                        <div className="text-left relative right-1 mt-2 flex flex-row">
+                            {tags.map((tag: string, idx: number) => (
+                                <Chip key={idx} label={tag} sx={{ marginRight: "2px " }} />
+                            ))}
+                        </div>
                     </CardContent>
                     <div className="absolute top-2 left-2 bg-highlight p-2 rounded-md">
                         <Typography className="!italic">{distance}m</Typography>

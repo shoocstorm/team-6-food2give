@@ -149,7 +149,7 @@ const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
   return (
     <>
-      <Header title={`Food Hero`} />
+      <Header/>
 
         <Profile name="Woodlands Community Center" imageUrl="/profile/woodlandsCC.jpg"/>
         

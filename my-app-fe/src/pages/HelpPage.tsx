@@ -7,7 +7,7 @@ import Header from '../parts/Header'; // Adjust the path as needed
 const HelpPage: React.FC = () => {
   return (
     <>
-      <Header title="Help & FAQ" />
+      <Header />
       <Box className="help-container" sx={{ padding: 3 }}>
         <Typography variant="h4" className="help-title" gutterBottom>
           Frequently Asked Questions

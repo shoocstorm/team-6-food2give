@@ -19,7 +19,7 @@ const DUMMY_CARDS: FoodPostingProps[] = [
   {
     foodPosting: {
       orderId: "ord1",
-      name: "nasi lemak",
+      name: "Nasi Lemak",
       numOfMeals: 20,
       preparedAt: dayjs("22 August 2024 14:20"),
       consumeBy: dayjs("22 August 2024 18:20"),
@@ -80,7 +80,7 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
 
   return (
     <>
-      <Header title={`Welcome, ${donorId}!`} />
+      <Header />
       <div className="breadcrumbs">
         {generateBreadcrumbs(["Donor", "Homepage"], ["/"])}
       </div>

@@ -49,7 +49,10 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
 
     return (
         <>
-            <Card sx={{ border: "1px solid #77dd77" }} onClick={handleCardClick}>
+            <Card
+                className="border border-white/20"
+                sx={{ borderRadius: '5%', margin: 1 }}
+                onClick={handleCardClick}>
                 <CardActionArea>
                     <CardMedia
                         component="img"
@@ -59,19 +62,34 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
                         sx={{ height: 140 }}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="body2" component="div">
                             {name}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary">
                             Consume by: {consumeBy}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary">
                             Quantity: {quantity}
                         </Typography>
-                        <br />
-                        {tags.map((tag: string, idx: number) => (
-                            <Chip key={idx} label={tag} sx={{ marginRight: "2px " }} />
-                        ))}
+                        <div
+                            className="text-left relative right-1 mt-2 flex gap-2"
+                            style={{ gap: '8px', flexWrap: 'wrap' }}
+                        >
+                            {tags.map((tag: string, idx: number) => (
+                                <Chip
+                                    key={idx}
+                                    label={tag}
+                                    sx={{
+                                        marginRight: "2px",
+                                        fontSize: "0.6rem",  
+                                        height: "24px",       
+                                        '& .MuiChip-label': {
+                                            padding: '0 8px',  
+                                        },
+                                    }}
+                                />
+                            ))}
+                        </div>
                     </CardContent>
                 </CardActionArea>
             </Card>

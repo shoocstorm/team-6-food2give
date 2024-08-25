@@ -14,11 +14,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/header.css";
 
-interface HeaderProps {
-  title: string;
-}
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+
+const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -59,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
               />
             </a>
             <Typography variant="h6" className="header-title">
-              {title}
+              Food Hero
             </Typography>
           </div>
           <IconButton

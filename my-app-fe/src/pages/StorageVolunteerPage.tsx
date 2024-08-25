@@ -3,6 +3,8 @@ import { Box, Typography } from '@mui/material';
 import Header from '../parts/Header';
 import InventoryPosting from '../parts/s_volunteers/InventoryPosting';
 import BaPosting from '../parts/s_volunteers/BaPosting';
+import Profile from "../parts/components/Profile";
+import SearchBar from "../parts/components/SearchBar"
 
 interface InventoryItem {
     name: string;
@@ -20,7 +22,7 @@ const StorageVolunteerPage: React.FC = () => {
     const [flag, setFlag] = useState(true);
     const [inventoryDataList, setInventoryDataList] = useState<InventoryItem[]>([
         {
-            name: "nasi lemak",
+            name: "Nasi Lemak",
             consumeBy: "2024-09-15",
             tags: ["Dairy", "Perishable", "Refrigerated"],
             quantity: 10,
@@ -110,11 +112,10 @@ const StorageVolunteerPage: React.FC = () => {
 
     return (
         <>
-            <Header title={`Welcome, John!`} />
-            <div className="p-10">
-                <Typography variant="h4">
-                    Fridge storage
-                </Typography>
+            <Header />
+            <Profile name="John" imageUrl="/profile/john.jpg"/>
+            <div>
+                
                 <div className="grid grid-cols-2 md:px-48 mt-5 md:mt-16">
                     <button>
                         <Typography variant="h5"
@@ -128,16 +129,16 @@ const StorageVolunteerPage: React.FC = () => {
                         </Typography>
                     </button>
                 </div>
-
+                <SearchBar setSearchQuery={() => {}} className="mt-4 w-60" />
                 <div className={`${flag ? '' : 'hidden'} md:px-48 mt-5 md:mt-16`}>
-                    <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
+                    <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
                         {inventoryDataList.map((inventoryData, idx) => (
                             <InventoryPosting key={idx} {...inventoryData} onGiveaway={handleGiveaway} />
                         ))}
                     </div>
                 </div>
                 <div className={`${flag ? 'hidden' : ''} md:px-48 mt-5 md:mt-16`}>
-                    <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
+                    <div className="grid md:grid-cols-4 grid-cols-2 gap-2">
                         {baDataList.map((baData, idx) => (
                             <BaPosting key={idx} {...baData} onOrder={handleOrder} />
                         ))}

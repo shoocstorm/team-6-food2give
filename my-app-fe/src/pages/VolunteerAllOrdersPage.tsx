@@ -111,7 +111,7 @@ const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : 
 
   return (
     <>
-    <Header title={`Food Hero`} />
+    <Header  />
     <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
             Welcome {volunteerId}!
         </Typography>

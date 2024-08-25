@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <>
-      <Header title="Food Hero" />
+      <Header />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <Grid
           item
