@@ -33,7 +33,6 @@ const RequestFoodModal: React.FC<RequestFoodModalProps> = ({
           p: 4,
           borderRadius: 2,
           maxHeight: "80vh",
-          overflowY: "scroll",
         }}
       >
         <Stack spacing={2} style={{ padding: "15px" }}>

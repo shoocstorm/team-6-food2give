@@ -12,7 +12,7 @@ import {
     Button,
     TextField,
 } from "@mui/material";
-import { useState } from "react";
+import React,{ useState } from "react";
 
 interface InventoryPostingProps {
     name: string;
@@ -24,7 +24,7 @@ interface InventoryPostingProps {
 
 const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, tags, quantity, onGiveaway }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [giveawayAmount, setGiveawayAmount] = useState(1);
+    const [giveawayAmount, setGiveawayAmount] = useState<number | string>('');
 
     const handleCardClick = () => {
         setIsDialogOpen(true);
@@ -36,23 +36,36 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
     };
 
     const handleConfirm = () => {
-        if (giveawayAmount > 0 && giveawayAmount <= quantity) {
-            onGiveaway(name, giveawayAmount);
+        const numericAmount = typeof giveawayAmount === 'number' ? giveawayAmount : parseInt(giveawayAmount, 10);
+      
+        if (!isNaN(numericAmount) && numericAmount > 0 && numericAmount <= quantity) {
+          onGiveaway(name, numericAmount);
         }
+      
         setIsDialogOpen(false);
-        setGiveawayAmount(1);
-    };
+        setGiveawayAmount(1); 
+      };
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setGiveawayAmount(parseInt(event.target.value) || 1);
-    };
+        const value = event.target.value;
+
+        if (value === '') {
+          setGiveawayAmount('');
+        } else {
+          const numericValue = parseInt(value, 10); 
+          if (!isNaN(numericValue) && numericValue >= 1) {
+            setGiveawayAmount(numericValue);
+          }
+        }
+      };
 
     return (
         <>
             <Card
                 className="border border-white/20"
                 sx={{ borderRadius: '5%', margin: 1 }}
-                onClick={handleCardClick}>
+                onClick={handleCardClick}
+            >
                 <CardActionArea>
                     <CardMedia
                         component="img"
@@ -61,15 +74,15 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
                         alt="Placeholder image"
                         sx={{ height: 140 }}
                     />
-                    <CardContent>
-                        <Typography gutterBottom variant="body2" component="div">
+                    <CardContent className="flex flex-col justify-start">
+                        <Typography gutterBottom variant="body1" component="div" align="left">
                             {name}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                            Consume by: {consumeBy}
+                        <Typography variant="caption" color="text.secondary" align="left">
+                            By {consumeBy}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                            Quantity: {quantity}
+                        <Typography variant="caption" color="text.secondary" align="left">
+                            {quantity} boxes
                         </Typography>
                         <div
                             className="text-left relative right-1 mt-2 flex gap-2"
@@ -81,11 +94,12 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
                                     label={tag}
                                     sx={{
                                         marginRight: "2px",
-                                        fontSize: "0.6rem",  
-                                        height: "24px",       
+                                        fontSize: "0.6rem",
+                                        height: "24px",
                                         '& .MuiChip-label': {
-                                            padding: '0 8px',  
+                                            padding: '0 8px',
                                         },
+                                        color: "white", backgroundColor: "green.500"
                                     }}
                                 />
                             ))}
@@ -94,7 +108,14 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
                 </CardActionArea>
             </Card>
 
-            <Dialog open={isDialogOpen} onClose={handleCancel}>
+            <Dialog open={isDialogOpen} onClose={handleCancel}
+                sx={{
+                    '& .MuiDialog-paper': {
+                        backgroundColor: 'background.default', 
+                        color: '#ffffff', 
+                        borderRadius: "10px"
+                    }
+                }}>
                 <DialogTitle>Giveaway Item</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -102,10 +123,11 @@ const InventoryPosting: React.FC<InventoryPostingProps> = ({ name, consumeBy, ta
                         margin="dense"
                         label="Amount to Give Away"
                         type="number"
+                        placeholder="1"
                         fullWidth
                         value={giveawayAmount}
                         onChange={handleAmountChange}
-                        inputProps={{ min: 1, max: quantity }}
+                        inputProps={{max: quantity }}
                     />
                 </DialogContent>
                 <DialogActions>

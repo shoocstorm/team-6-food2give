@@ -46,7 +46,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
   return (
     <>
       <div className="flex flex-row justify-between items-center">
-        <Typography variant="h6">Check terms and conditions</Typography>
+        <Typography variant="h6">Check terms & conditions</Typography>
         <IconButton
           onClick={() => {
             onClose();

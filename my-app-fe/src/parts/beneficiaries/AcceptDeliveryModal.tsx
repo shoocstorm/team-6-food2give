@@ -54,10 +54,9 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
         </h1>
         <Button
         variant="contained"
-        color="primary"
         onClick={handleSubmit}
         fullWidth
-        sx={{ marginTop: "10px" }}
+        sx={{ marginTop: "10px", color: 'white', backgroundColor: 'green.300'}}
       >
         Yes
       </Button>

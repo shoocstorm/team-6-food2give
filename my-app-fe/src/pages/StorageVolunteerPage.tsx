@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Card } from '@mui/material';
 import Header from '../parts/Header';
 import InventoryPosting from '../parts/s_volunteers/InventoryPosting';
 import BaPosting from '../parts/s_volunteers/BaPosting';
@@ -43,7 +43,7 @@ const StorageVolunteerPage: React.FC = () => {
 
     const [baDataList, setBaDataList] = useState<BaItem[]>([
         {
-            name: "nasi lemak",
+            name: "Nasi Lemak",
             location: "Social Bakery @ 97 Main St",
             distance: 0,
             consumeBy: "2024-09-04",
@@ -51,7 +51,7 @@ const StorageVolunteerPage: React.FC = () => {
             quantity: 15,
         },
         {
-            name: "chicken rice",
+            name: "Chicken Rice",
             location: "ElderFoods @ 96 Main St",
             distance: 150,
             consumeBy: "2024-09-15",
@@ -113,9 +113,9 @@ const StorageVolunteerPage: React.FC = () => {
     return (
         <>
             <Header />
-            <Profile name="John" imageUrl="/profile/john.jpg"/>
+            <Profile name="John" imageUrl="/profile/john.jpg" />
             <div>
-                
+
                 <div className="grid grid-cols-2 md:px-48 mt-5 md:mt-16">
                     <button>
                         <Typography variant="h5"
@@ -129,21 +129,27 @@ const StorageVolunteerPage: React.FC = () => {
                         </Typography>
                     </button>
                 </div>
-                <SearchBar setSearchQuery={() => {}} className="mt-4 w-60" />
-                <div className={`${flag ? '' : 'hidden'} md:px-48 mt-5 md:mt-16`}>
-                    <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
-                        {inventoryDataList.map((inventoryData, idx) => (
-                            <InventoryPosting key={idx} {...inventoryData} onGiveaway={handleGiveaway} />
-                        ))}
+
+
+                <Card className="p-5">
+                    <SearchBar setSearchQuery={() => { }} className=" w-full" />
+
+                    <div className={`${flag ? '' : 'hidden'} md:px-48 mt-5 md:mt-16`}>
+                        <div className="grid md:grid-cols-4 grid-cols-2">
+                            {inventoryDataList.map((inventoryData, idx) => (
+                                <InventoryPosting key={idx} {...inventoryData} onGiveaway={handleGiveaway} />
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div className={`${flag ? 'hidden' : ''} md:px-48 mt-5 md:mt-16`}>
-                    <div className="grid md:grid-cols-4 grid-cols-2 gap-2">
-                        {baDataList.map((baData, idx) => (
-                            <BaPosting key={idx} {...baData} onOrder={handleOrder} />
-                        ))}
+                    <div className={`${flag ? 'hidden' : ''} md:px-48 mt-5 md:mt-16`}>
+                        <div className="grid md:grid-cols-4 grid-cols-2">
+                            {baDataList.map((baData, idx) => (
+                                <BaPosting key={idx} {...baData} onOrder={handleOrder} />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </Card>
+
             </div>
         </>
     );

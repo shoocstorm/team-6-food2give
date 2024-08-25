@@ -5,9 +5,10 @@ import { AddCircleOutline } from "@mui/icons-material";
 import FoodPosting, { FoodPostingProps } from "../parts/donors/FoodPosting";
 import { useEffect, useState } from "react";
 import AddFoodPostingModal from "../parts/donors/AddFoodPostingModal";
-import { generateBreadcrumbs } from "../util/generateBreadcrumbs";
+// import { generateBreadcrumbs } from "../util/generateBreadcrumbs";
 import { getFoodPosting } from "../api/donor";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
+import Profile from "../parts/components/Profile";
 
 interface DonorPageProps {
   donorId: string;
@@ -83,38 +84,33 @@ const DonorPage: React.FC<DonorPageProps> = ({ donorId }: DonorPageProps) => {
   return (
     <>
       <Header />
-      <div className="breadcrumbs">
-        {generateBreadcrumbs(["Donor", "Homepage"], ["/"])}
-      </div>
-      <Card raised className="container-box">
-        <div className="flex justify-between items-center">
-          <Typography variant="h4" fontWeight="semibold">
-            My donations
-          </Typography>
-
-          <Button
-            variant="contained"
+      <div className="flex flex-row items-center">
+        <Profile name="John" imageUrl="/profile/john.jpg"/>
+        <Button
+            sx={{color: "white", backgroundColor: "green.400", px:2}}
             startIcon={<AddCircleOutline />}
             style={{ height: "fit-content" }}
             onClick={() => setIsAddModalOpen(true)}
+
           >
             Add
           </Button>
-        </div>
-        <br />
-        <AddFoodPostingModal
+      </div>
+      
+      <AddFoodPostingModal
           donorId={donorId}
           isModalOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
         />
+        
+        
         <Card className="p-5">
-          <div className="card-grid">
+          <div className="grid grid-cols-2 w-full">
             {foodDonations.map((post: FoodPostingProps, idx: number) => (
               <FoodPosting key={idx} {...post} />
             ))}
           </div>
         </Card>
-      </Card>
     </>
   );
 };

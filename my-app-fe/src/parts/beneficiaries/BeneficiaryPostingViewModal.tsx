@@ -51,7 +51,6 @@ const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = 
           borderRadius: 10,
           border: "1px solid #616161",
           maxHeight: "80vh",
-          overflowY: "scroll",
         }}
       >
         <BeneficiaryPostingView

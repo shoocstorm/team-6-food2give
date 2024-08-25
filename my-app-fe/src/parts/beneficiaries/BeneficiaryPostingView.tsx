@@ -75,17 +75,19 @@ const BeneficiaryPostingView: React.FC<FoodPostingViewProps> = ({
         {formState.name || "No Name Provided"}
       </Typography>
       <Chip
-        sx={{ borderRadius: 0 }}
+        sx={{ borderRadius: 2, color: "white", backgroundColor: "green.400"}}
         label={`x ${formState.numOfMeals ?? 0} meal(s)`}
         className="mb-4"
+        
       />
       <Stack direction="row" sx={{ mb: 1 }} flexWrap="wrap">
         {formState.tags.map((tag, index) => (
           <Chip
             key={index}
             label={tag}
-            variant="outlined"
-            className="mr-1 mb-1"
+            className="mr-2 mb-1"
+            sx={{ borderRadius: 2, color: "white", backgroundColor: "green.500"
+            }}
           />
         ))}
       </Stack>

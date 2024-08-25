@@ -172,20 +172,21 @@ const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
           </ul>
         <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
-      
-      <div className="flex flex-row justify-around">
-        <SearchBar 
-          setSearchQuery={setSearchQuery} 
-          className="mt-4 w-60"
-          />
-        <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
-      </div>
-      
-      <div className="w-full grid grid-cols-2" >
-          {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
-            <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
-          ))}
-      </div>
+      <Card className="p-5 h-screen">
+        <div className="flex flex-row justify-around">
+          <SearchBar 
+            setSearchQuery={setSearchQuery} 
+            className="mt-4 w-60"
+            />
+          <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
+        </div>
+              
+        <div className="w-full grid grid-cols-2 mt-4" >
+            {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
+              <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
+            ))}
+        </div>
+      </Card>
         {/* <Button
               variant="contained"
               startIcon={<AddCircleOutline />}

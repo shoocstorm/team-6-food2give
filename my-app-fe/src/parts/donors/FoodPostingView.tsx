@@ -82,7 +82,7 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
         />
       ) : (
         <Chip
-          sx={{ borderRadius: 0 }}
+        sx={{ borderRadius: 2, color: "white", backgroundColor: "green.400"}}
           label={`${(formState as FoodPostingViewModel).numMealsTaken}/${
             (formState as FoodPostingViewModel).numOfMeals ?? 0
           } meal(s) taken`}
@@ -95,6 +95,7 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
             key={index}
             label={tag}
             variant="outlined"
+            sx={{ borderRadius: 2, color: "white", backgroundColor: "green.500"}}
             className="mr-1 mb-1"
           />
         ))}
@@ -118,7 +119,13 @@ const FoodPostingView: React.FC<FoodPostingViewProps> = ({
         Recurring: {formState.recurring ? "Yes" : "No"}
       </Typography>
       {formState.selectedDays.map((day, index) => (
-        <Chip key={index} label={day} variant="outlined" />
+        <Chip 
+          key={index} 
+          label={day} 
+          variant="outlined"
+          sx={{ borderRadius: 2, color: "white", backgroundColor: "green.500"}}
+          className="mr-1 mb-1"
+        />
       ))}
       {viewMode === FoodPostingViewMode.FORM && (
         <Button
