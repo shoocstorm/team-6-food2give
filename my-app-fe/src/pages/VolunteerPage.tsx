@@ -92,7 +92,7 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
         // Optionally update the UI, for example, move the order from availableJobs to currentJob
       }
     } catch (error) {
-      console.error("Error accepting the order:", error);
+      alert("You need to log in");
     }
   };
   return (

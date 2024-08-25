@@ -48,6 +48,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     driverId: 1,
     driverName: "Driver1",
     status: "Delivering",
+    location: "Ang Mokio",
   },
   {
     foodPosting: {
@@ -73,9 +74,39 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     },
     donorId: "donor1",
     donorLocation: "Location1",
+    location: "Pasir ris CP",
     status: "Listed",
     storageVolunteerName:"Loh Chee Keng",
     storageVolunteerId: 1
+  },
+  {
+    foodPosting: {
+      orderId: "ord1",
+      name: "Chicken Rice",
+      numOfMeals: 10,
+      preparedAt: dayjs("22 August 2024 14:20"),
+      consumeBy: dayjs("22 August 2024 18:20"),
+      tags: ["halal", "soy"],
+      recurring: false,
+      image: null,
+      imagePreview: "/beneficiary/food_2.jpeg",
+      selectedDays: [],
+      numMealsTaken: 0,
+      requests: [
+        {
+          orderId: "ord1",
+          beneficiaryName: "Woodlands FSC",
+          numOfMealsRequested: 2,
+          subtitles: ["Finding driver..."],
+        },
+      ],
+    },
+    donorId: "donor1",
+    donorLocation: "Location1",
+    status: "Not acquired",
+    storageVolunteerName:"Loh Chee Keng",
+    storageVolunteerId: 1,
+    location: "Changi Airport"
   },
 ];
 
