@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Container, Grid, Modal, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Container, Grid, Modal, Typography, Card } from '@mui/material';
 import Header from '../parts/Header'; // Import Header component
 import '../assets/css/home.css';
 import JobPosting from '../parts/volunteers/JobPosting';
@@ -8,6 +8,7 @@ import jobPosting, { emptyJobPosting } from '../interfaces/JobPosting';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Profile from '../parts/components/Profile';
+import SearchBar from "../parts/components/SearchBar";
 
 interface VolunteerPageProps {
   volunteerId: string;
@@ -88,11 +89,12 @@ const currentJobPosting = {
   previewImage: "/beneficiary/food_1.jpeg"
 }
 
-const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : VolunteerPageProps) => {
+const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId }: VolunteerPageProps) => {
   const [selectedJob, setSelectedJob] = useState<jobPosting>(emptyJobPosting())
   const [isOpen, setIsOpen] = useState(false)
   const [availableJobs, setAvailableJobs] = useState(availableJobPostings)
   const [currentJob, setCurrentJob] = useState(currentJobPosting)
+  const [searchQuery, setSearchQuery] = useState("");
   const idToken = localStorage.getItem('idToken')
   const userId = localStorage.getItem('userId')
 
@@ -147,44 +149,48 @@ const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : 
 
   return (
     <>
-    <Header  />
-    <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg"/>
-    <>
-          <ul className="w-screen flex flex-row justify-around">
-              {SECTIONS.map((section, idx) => {
-                const word = section.toLowerCase().replaceAll(" ", "-");
-                const formattedLink = word === "currently-delivering" ? "/volunteer" : ``;
+      <Header />
+      <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg" />
+      <>
+        <ul className="w-screen flex flex-row justify-around">
+          {SECTIONS.map((section, idx) => {
+            const word = section.toLowerCase().replaceAll(" ", "-");
+            const formattedLink = word === "currently-delivering" ? "/volunteer" : ``;
 
-                return (
-                  <li key={idx} className="relative text-xl text-white">
-                  <Link to={formattedLink} className="text-white no-underline">
-                    {section}
-                  </Link>
-                  <hr className={`absolute left-0 right-0 top-8 ${word === "orders-to-fulfil" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
-                </li>
-                )}
-              )}
-          </ul>
-        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
-      
-    </>
-    <div style={{margin: "40px 80px"}}>
-      <Container className="container-box" >
-      <Grid container spacing={3}>
-        {availableJobs.map(posting => (
-          <>
-          <Grid item xs={12} lg={4}>
-            <JobPosting jobPosting={posting} onClick={() => {
-              setIsOpen(true)
-              setSelectedJob(posting)
-            }}/>
-          </Grid>
-          </>
+            return (
+              <li key={idx} className="relative text-xl text-white">
+                <Link to={formattedLink} className="text-white no-underline">
+                  {section}
+                </Link>
+                <hr className={`absolute left-0 right-0 top-8 ${word === "orders-to-fulfil" ? 'bg-white h-1 border-0' : 'hidden'}`}></hr>
+              </li>
+            )
+          }
+          )}
+        </ul>
+        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10" />
+
+      </>
+      <Card className="p-5 h-screen">
+        <SearchBar
+          setSearchQuery={setSearchQuery}
+          className="mt-4 w-full"
+        />
+
+        <div className="w-full grid grid-cols-2 mt-4" >
+          {availableJobs.map(posting => (
+            <>
+              <Grid item xs={12} lg={4}>
+                <JobPosting jobPosting={posting} onClick={() => {
+                  setIsOpen(true)
+                  setSelectedJob(posting)
+                }} />
+              </Grid>
+            </>
           ))}
-      </Grid>
-      </Container>
-      </div>
-      <JobPostingModal jobPosting={selectedJob} open={isOpen} onClose={() => setIsOpen(false)} onAccept={onAccept} onFinish={onFinish} onCancel={onFinish}/>
+        </div>
+      </Card>
+      <JobPostingModal jobPosting={selectedJob} open={isOpen} onClose={() => setIsOpen(false)} onAccept={onAccept} onFinish={onFinish} onCancel={onFinish} />
     </>
   );
 };

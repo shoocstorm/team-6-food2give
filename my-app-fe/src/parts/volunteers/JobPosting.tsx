@@ -1,4 +1,4 @@
-import { Card, CardMedia, Box, Stack, Typography, Divider, CardActionArea } from "@mui/material"
+import { Card, CardMedia, Box, Stack, Typography, Divider, CardActionArea, CardContent } from "@mui/material"
 import React from "react"
 import InfoIcon from '@mui/icons-material/Info';
 import jobPosting from "../../interfaces/JobPosting";
@@ -13,38 +13,24 @@ const JobPosting: React.FC<JobPostingProps> = ({
 } : JobPostingProps) => {
   const {orderId, tripDuration, numberOfMeals, pointsEarned, previewImage} = jobPosting || {}
   return (
-    <Card>
+    <Card className="border border-white/20"  sx={{ borderRadius: '5%', margin: 1 }}>
       <CardActionArea onClick={onClick}>
-      <Stack spacing={2} style={{padding: "15px"}}>
-        <Typography variant="h5" style={{textAlign: "left"}}>Order #{orderId}</Typography>
         <CardMedia
             component="img"
-            height="140"
+            height="100"
             image={previewImage}
             alt="Placeholder image"
-            sx={{ height: 200 }}
+            sx={{ height: 100 }}
           />
-        <Stack spacing={1} style={{textAlign: "left", margin: "10px"}}>
-          <Box>
-            <Typography variant="body1" fontWeight="bold">
-              Order Details
-            </Typography>
-            <Divider sx={{ marginBottom: 2 }} />
-            <Typography variant="body2">
-              <strong>Number of Meals:</strong> {numberOfMeals}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Collectable points:</strong> {pointsEarned}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Estimated trip duration:</strong> {tripDuration} mins
-            </Typography>
-            <Typography variant="body2">
-              <strong>Distance to restaurant:</strong> 5km
-            </Typography>
-          </Box>
-        </Stack>
-      </Stack>
+          <CardContent className="flex flex-col ">
+          <Typography variant="body1" style={{textAlign: "left"}}>Order #{orderId}</Typography>
+          <Typography gutterBottom variant="body2" component="div" align="left">
+            Delivering <strong>{numberOfMeals}</strong> meals
+          </Typography>
+          {/* <Typography variant="caption" color="text.secondary" align="left">
+            <strong>Collectable points:</strong> {pointsEarned} 
+          </Typography> */}
+          </CardContent>
       </CardActionArea>
 
     </Card>
