@@ -94,7 +94,13 @@ const AddFoodPostingModal: React.FC<AddFoodPostingModalProps> = ({
           />
         ) : stage === AddFoodPostingFormStage.TNC ? (
           <AddFoodTNCForm
-            prompts={["test1", "test2"]}
+            prompts={[
+              "I agree that the food must not be unsafe and unsuitable at the time it is donated.",
+              "As per FoodHero policy, there are food safety template cards attached to the food boxes to fill.",
+              "Through the food safety cards, I agree to inform the recipient of any particular handling requirements to ensure the food remains safe to consume.",
+              "Through the food safety cards, I agree to inform the recipient of any time limit within which the food remains safe and suitable.",
+              "I agree that I will take all reasonable measures to comply with food safety and hygiene requirements up to the point of donation.",
+            ]}
             handleNext={() => setStage(AddFoodPostingFormStage.VERIFY)}
             onClose={onClose}
             resetFormState={resetFormState}

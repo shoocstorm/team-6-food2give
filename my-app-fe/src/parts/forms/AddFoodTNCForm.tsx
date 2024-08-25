@@ -72,6 +72,7 @@ const AddFoodTNCForm: React.FC<AddFoodTNCFormProps> = ({
                 }
               />
             }
+            key={idx}
             label={prompt}
           />
         ))}

@@ -51,13 +51,15 @@ const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
           onClose={onClose}
           viewMode={FoodPostingViewMode.MATCHING}
         />
+        <br />
+        <br />
         <Tooltip title="Meals given out" arrow>
           <div className="flex flex-row justify-between items-center gap-2">
             <div className="grow">
               <ProgressBar
                 fraction={
-                  (foodPosting as FoodPostingViewModel).numMealsTaken ??
-                  0 / foodPosting.numOfMeals
+                  ((foodPosting as FoodPostingViewModel).numMealsTaken ?? 0) /
+                  foodPosting.numOfMeals
                 }
               />
             </div>
@@ -72,6 +74,7 @@ const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
             <AccessTimeOutlined color="primary" />
           </div>
         </Tooltip>
+        <br />
         {foodPosting.requests?.map(
           (req: BeneficiaryOrderRequestCardProps, idx: number) => (
             <BeneficiaryOrderRequestCard {...req} key={idx} />

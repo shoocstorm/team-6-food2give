@@ -1,16 +1,17 @@
+import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import DonorPage from "./pages/DonorPage";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "./App.css";
+import Home from "./pages/Home";
+import DonorPage from "./pages/DonorPage";
 import HelpPage from './pages/HelpPage'; 
+import StorageVolunteerPage from "./pages/StorageVolunteerPage";
+import RewardsPage from './pages/RewardsPage';
+import VolunteerPage from "./pages/VolunteerPage";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import RewardsPage from './pages/RewardsPage'; // Import the RewardsPage component
-import VolunteerPage from "./pages/VolunteerPage";
 import Layout from "./layouts/Layout";
 import JoinPage from "./parts/register/JoinPage";
 import LoginPage from "./parts/register/LoginPage";
@@ -19,7 +20,7 @@ import BADonations from "./pages/BADonationsPage";
 
 
 // extending the Palette interface to include a custom color green in the theme
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Palette {
     green: {
       "100": string;
@@ -43,7 +44,7 @@ declare module '@mui/material/styles' {
 function App() {
   const theme = createTheme({
     typography: {
-      fontFamily: ["Montserrat","Roboto","Arial","sans-serif"].join(","),
+      fontFamily: ["Montserrat", "Roboto", "Arial", "sans-serif"].join(","),
       allVariants: {
         color: "#ffffff",
       },
@@ -64,12 +65,13 @@ function App() {
         primary: "#ffffff",
         secondary: "#b0b0b0",
       },
-      green: {  // Add custom color here
+      green: {
+        // Add custom color here
         "100": "#eafaf4",
-        "200":"#90CFB8",
-        "300":"#57A588",
-        "400":"#2C7A5E",
-        "500":"#0F5038"
+        "200": "#90CFB8",
+        "300": "#57A588",
+        "400": "#2C7A5E",
+        "500": "#0F5038",
       },
     },
     components: {
@@ -106,6 +108,10 @@ function App() {
           <Router>
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route
+                  path="/storagevolunteer"
+                  element={<StorageVolunteerPage />}
+                />
                 <Route
                   path="/donor"
                   element={<DonorPage donorId="Bread Talk" />}
