@@ -16,9 +16,9 @@ interface JobPostingModalProps {
   jobPosting: jobPosting;
   open: boolean;
   onClose: () => void;
-  onAccept: () => void;
   onFinish: () => void;
   onCancel: () => void;
+  onAccept: (orderId: string) => void;
 }
 
 const JobPostingModal: React.FC<JobPostingModalProps> = ({
@@ -100,6 +100,16 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
                 </Typography>
                 <Typography variant="body1">{pickupInstructions}</Typography>
               </Box>
+              <Divider sx={{ marginBottom: 2 }} />
+              <Box display="flex" alignItems="center">
+                <InfoIcon color="info" sx={{ marginRight: 1 }} />
+                <Box>
+                  <Typography variant="body1" fontWeight="bold">
+                    Pick up instructions
+                  </Typography>
+                  <Typography variant="body1">{pickupInstructions}</Typography>
+                </Box>
+              </Box>
             </Box>
           </Stack>
           {orderAssigned ? (
@@ -122,7 +132,11 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
               Cancel Order
             </Button>
           ) : (
-            <Button variant="contained" size="large" onClick={onAccept}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => onAccept(orderId)}
+            >
               Accept Order
             </Button>
           )}

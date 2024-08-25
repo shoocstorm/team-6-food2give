@@ -59,7 +59,7 @@ function App() {
         paper: "#121212",
       },
       primary: {
-        main: "#77dd77",
+        main: "#90CFB8",
       },
       secondary: {
         main: "#ffb347",

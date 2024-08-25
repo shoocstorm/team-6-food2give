@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../parts/components/SearchBar";
 import { useLocation } from 'react-router-dom';
 import FilterBar from "../parts/beneficiaries/FilterBar";
+import Profile from "../parts/components/Profile";
 
 interface BaPageProps {
   baId: string;
@@ -85,7 +86,7 @@ const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
-
+  console.log(location.pathname);
   const filterData = (query: string, data: BeneficiaryViewModel[], filter: string): BeneficiaryViewModel[] => {
     let filteredData = data;
   
@@ -121,18 +122,24 @@ const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   return (
     <>
       <Header title={`Food Hero`} />
-        <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
-            Welcome {baId}
-        </Typography>
-        
+
+          <Profile name="Woodlands Community Center" imageUrl="/profile/woodlandsCC.jpg"/>
+
           <ul className="w-screen flex flex-row justify-around">
               {SECTIONS.map((section, idx) => {
                 const word = section.toLowerCase().replace(" ", "-");
+                //If it's home, it's empty, else it's the url name
                 const formattedLink = word == "home" ? "" : section.toLowerCase().replace(" ", "-");
 
+                let pathName = location.pathname
+                if(location.pathname === "/beneficiary/") {
+                  pathName = location.pathname.slice(0, -1);
+                }
+
                 return (
-                  <li key={idx} className="relative text-xl text-white">
-                  <Link to={`${location.pathname}${formattedLink ? `/${formattedLink}` : ""}`} className="text-white no-underline">
+                  <li key={idx} className="relative text-lg">
+                  <Link to={`${pathName}${formattedLink ? `/${formattedLink}` : ""}`} 
+                    className={` no-underline ${word === "home" ? 'text-white font-semibold': 'text-white/80'} `}>
                     {section}
                   </Link>
                   <hr className={`absolute left-0 right-0 top-8 ${word === "home" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
