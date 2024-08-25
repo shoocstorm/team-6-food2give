@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <div className="flex flex-row items-center gap-3">
             <a href="/">
               <img
-                src="home/foodHero.png"
+                src="/home/foodHero.png"
                 style={{ height: "40px" }}
                 alt="ico"
               />

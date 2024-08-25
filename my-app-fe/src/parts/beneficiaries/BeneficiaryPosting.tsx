@@ -34,7 +34,7 @@ const BeneficiaryPosting: React.FC<BeneficiaryPostingProps> = ({ beneficiaryPost
 
   return (
     <>
-      <Card className="m-2"  sx={{ borderRadius: '5%', margin: 2 }}>
+      <Card className="m-2 border border-white/20"  sx={{ borderRadius: '5%', margin: 2 }}>
         <CardActionArea onClick={() => setIsModalOpen(true)}>
           <CardMedia
             component="img"
@@ -55,7 +55,8 @@ const BeneficiaryPosting: React.FC<BeneficiaryPostingProps> = ({ beneficiaryPost
             </Typography>
             <div className="text-left relative right-1 mt-2">
             {tags.map((tag: string, idx: number) => (
-              <Chip key={idx} label={tag} sx={{ marginRight: "3px " }} />
+              <Chip key={idx} label={tag} sx={{ marginRight: "3px", color:"white", borderColor:"#616161"
+               }} />
             ))}
             </div>
             
