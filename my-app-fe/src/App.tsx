@@ -1,16 +1,18 @@
+import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import DonorPage from "./pages/DonorPage";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "./App.css";
-import HelpPage from "./pages/HelpPage";
+import Home from "./pages/Home";
+import DonorPage from "./pages/DonorPage";
+import HelpPage from './pages/HelpPage'; 
+import StorageVolunteerPage from "./pages/StorageVolunteerPage";
+import RewardsPage from './pages/RewardsPage';
+import VolunteerPage from "./pages/VolunteerPage";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import RewardsPage from "./pages/RewardsPage"; // Import the RewardsPage component
-import VolunteerPage from "./pages/VolunteerPage";
+import Layout from "./layouts/Layout";
 import JoinPage from "./parts/register/JoinPage";
 import LoginPage from "./parts/register/LoginPage";
 
@@ -102,16 +104,23 @@ function App() {
         <div className="App">
           <Router>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/donor" element={<DonorPage donorId="Crave" />} />
-              <Route
-                path="/volunteer"
-                element={<VolunteerPage volunteerId="Bob" />}
-              />
-              <Route path="/rewards" element={<RewardsPage />} />
-              <Route path="/help" element={<HelpPage />} />
-              <Route path="/join" element={<JoinPage />} />
-              <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/storagevolunteer"
+                  element={<StorageVolunteerPage />}
+                />
+                <Route
+                  path="/donor"
+                  element={<DonorPage donorId="Bread Talk" />}
+                />
+                <Route
+                  path="/volunteer"
+                  element={<VolunteerPage volunteerId="Bob" />}
+                />
+                <Route path="/rewards" element={<RewardsPage />} />
+                <Route path="/help" element={<HelpPage />} />
+                <Route path="/join" element={<JoinPage />} />
+                <Route path="/login" element={<LoginPage />} /> 
             </Routes>
           </Router>
         </div>
