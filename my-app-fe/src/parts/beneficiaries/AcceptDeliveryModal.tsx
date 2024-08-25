@@ -38,14 +38,14 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 350,
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-          border: "1px solid #77dd77",
+          py: 4,
+          px: 5,
+          borderRadius: 10,
+          border: "1px solid #616161",
           maxHeight: "80vh",
-          overflowY: "scroll",
         }}
       >
        
@@ -54,10 +54,9 @@ const AcceptDeliveryModal: React.FC<AcceptOrderModalProps> = ({
         </h1>
         <Button
         variant="contained"
-        color="primary"
         onClick={handleSubmit}
         fullWidth
-        sx={{ marginTop: "10px" }}
+        sx={{ marginTop: "10px", color: 'white', backgroundColor: 'green.300'}}
       >
         Yes
       </Button>

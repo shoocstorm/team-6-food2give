@@ -17,7 +17,7 @@ const Home: React.FC = () => {
   };
   return (
     <>
-      <Header title="Food Hero" />
+      <Header />
       <Box className="home-container overflow-auto h-screen px-2">
         <Typography variant="body1" className="home-title flex-col flex pt-10 py-2 font-light" sx={{fontWeight:'200'}}>
           Want to make a difference?{' '}

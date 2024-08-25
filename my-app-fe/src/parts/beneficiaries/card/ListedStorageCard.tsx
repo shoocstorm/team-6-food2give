@@ -30,6 +30,8 @@ const ListedStorageCard: React.FC<BeneficiaryDeliveryCardProps> = ({
           className="!mt-2 w-full"
           onClick={() => setIsModalOpen(true)}
           disabled={isAccepted}
+          sx={{color: 'white', backgroundColor: 'green.300'}}
+
         >
           {isAccepted ? "Accepted" : "Accept"}
         </Button>

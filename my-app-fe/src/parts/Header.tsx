@@ -14,11 +14,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/header.css";
 
-interface HeaderProps {
-  title: string;
-}
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+
+const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -53,13 +51,13 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <div className="flex flex-row items-center gap-3">
             <a href="/">
               <img
-                src="home/foodHero.png"
+                src="/home/foodHero.png"
                 style={{ height: "40px" }}
                 alt="ico"
               />
             </a>
             <Typography variant="h6" className="header-title">
-              {title}
+              Food Hero
             </Typography>
           </div>
           <IconButton
@@ -77,14 +75,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <ListItem button onClick={() => handleMenuItemClick("/beneficiary")}>
             <ListItemText primary="Beneficiary" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick("/volunteer")}>
+          <ListItem button onClick={() => handleMenuItemClick("/volunteer/orders-to-fulfil")}>
             <ListItemText primary="Volunteer" />
           </ListItem>
           <ListItem button onClick={() => handleMenuItemClick('/storagevolunteer')}>
             <ListItemText primary="Storage Volunteer" />
-          </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick('/organization')}>
-            <ListItemText primary="Organization" />
           </ListItem>
           <ListItem button onClick={() => handleMenuItemClick("/donor")}>
             <ListItemText primary="Donors" />

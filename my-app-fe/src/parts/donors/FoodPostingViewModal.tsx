@@ -39,9 +39,10 @@ const FoodPostingViewModal: React.FC<FoodPostingViewModalProps> = ({
           width: 400,
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-          border: "1px solid #77dd77",
+          py: 4,
+          px: 5,
+          borderRadius: 10,
+          border: "1px solid #616161",
           maxHeight: "80vh",
           overflowY: "scroll",
         }}

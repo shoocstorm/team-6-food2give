@@ -18,7 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSearchQuery, className }) => {
     <form onSubmit={(e) => e.preventDefault()} className={className}>
       <TextField
         id="search-bar"
-        className="bg-slate-900"
+        className="bg-gray-800"
         onChange={handleInputChange}
         placeholder="Search..."
         size="small"
@@ -26,7 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSearchQuery, className }) => {
             startAdornment: (
               <InputAdornment position="start">
                 <IconButton aria-label="search">
-                  <SearchIcon className="text-slate-600" />
+                  <SearchIcon className="text-gray-600" />
                 </IconButton>
               </InputAdornment>
             ),

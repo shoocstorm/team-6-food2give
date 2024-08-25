@@ -36,7 +36,7 @@ const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = 
   frac = frac > 1 ? 1 : frac;
 
   return (
-    <Modal open={isModalOpen} onClose={onClose} className="m-4 overflow-scroll">
+    <Modal open={isModalOpen} onClose={onClose} className="m-4 overflow-scroll ">
       <Box
         sx={{
           position: "absolute",
@@ -46,11 +46,11 @@ const BeneficiaryPostingViewModal: React.FC<BeneficiaryPostingViewModalProps> = 
           width: 400,
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-          border: "1px solid #77dd77",
+          py: 4,
+          px: 5,
+          borderRadius: 10,
+          border: "1px solid #616161",
           maxHeight: "80vh",
-          overflowY: "scroll",
         }}
       >
         <BeneficiaryPostingView

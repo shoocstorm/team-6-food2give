@@ -60,14 +60,14 @@ logger = logging.getLogger(__name__)
 @server.route('/add-food', methods=['POST'])
 def add_food_posting():
     image_file = request.files.get('image')
-    if not image_file:
-        return jsonify({"error": "Missing image file"}), 400
-    # Save image to Firebase Storage
-    blob = bucket.blob(f"images/{image_file.filename}")
-    blob.upload_from_file(image_file)
-    blob.make_public()
-    
-    image = blob.public_url
+    if image_file:
+     
+        # Save image to Firebase Storage
+        blob = bucket.blob(f"images/{image_file.filename}")
+        blob.upload_from_file(image_file)
+        blob.make_public()
+        
+        image = blob.public_url
     
     try:
         data = request.form.to_dict()
@@ -79,7 +79,8 @@ def add_food_posting():
         # Store the food posting in the database
         prepared_at_date = datetime.datetime.strptime(data['preparedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d')
         ref = db.reference(f'food_postings')
-        data['image'] = image
+        if image_file:
+            data['image'] = image
         new_post_ref = ref.push(data)
         post_id = new_post_ref.key
         new_post_ref.update({ "donorListingId": post_id }) 

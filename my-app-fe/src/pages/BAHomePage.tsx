@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../parts/components/SearchBar";
 import { useLocation } from 'react-router-dom';
 import FilterBar from "../parts/beneficiaries/FilterBar";
+import Profile from "../parts/components/Profile";
 
 interface BaPageProps {
   baId: string;
@@ -76,7 +77,7 @@ const DUMMY_CARDS: BeneficiaryViewModel[] = [
     donorLocation: "Location1",
     location: "Pasir ris CP",
     status: "Listed",
-    storageVolunteerName:"Loh Chee Keng",
+    storageVolunteerName: "Loh Chee Keng",
     storageVolunteerId: 1
   },
   {
@@ -116,25 +117,25 @@ const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
-
+  console.log(location.pathname);
   const filterData = (query: string, data: BeneficiaryViewModel[], filter: string): BeneficiaryViewModel[] => {
     let filteredData = data;
-  
+
     if (query) {
       filteredData = filteredData.filter((d) =>
         d.foodPosting.name.toLowerCase().includes(query.toLowerCase())
       );
     }
-  
+
     if (filter === "Food Requests") {
       filteredData = filteredData.filter((d) => d.foodPosting.requests!.length > 0);
     } else if (filter === "Storage Required") {
       filteredData = filteredData.filter((d) => d.foodPosting.tags.includes("storage-required"));
     }
-  
+
     return filteredData;
   };
-  
+
   const dataFiltered = filterData(searchQuery, foodDonations, selectedFilter);
 
   // useEffect(() => {
@@ -151,56 +152,50 @@ const BAHomePage: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
   return (
     <>
-      <Header title={`Food Hero`} />
-        <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
-            Welcome {baId}
-        </Typography>
-        
-          <ul className="w-screen flex flex-row justify-around">
-              {SECTIONS.map((section, idx) => {
-                const word = section.toLowerCase().replace(" ", "-");
-                const formattedLink = word == "home" ? "" : section.toLowerCase().replace(" ", "-");
+      <Header />
 
-                return (
-                  <li key={idx} className="relative text-xl text-white">
-                  <Link to={`${location.pathname}${formattedLink ? `/${formattedLink}` : ""}`} className="text-white no-underline">
-                    {section}
-                  </Link>
-                  <hr className={`absolute left-0 right-0 top-8 ${word === "home" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
-                </li>
-                )}
-              )}
+      <Profile name="Woodlands Community Center" imageUrl="/profile/woodlandsCC.jpg" />
 
-          </ul>
-        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
-      
-      <div className="flex flex-row justify-around">
-        <SearchBar 
-          setSearchQuery={setSearchQuery} 
-          className="mt-4 w-60"
+      <ul className="w-screen flex flex-row justify-around">
+        {SECTIONS.map((section, idx) => {
+          const word = section.toLowerCase().replace(" ", "-");
+          //If it's home, it's empty, else it's the url name
+          const formattedLink = word == "home" ? "" : section.toLowerCase().replace(" ", "-");
+
+          let pathName = location.pathname
+          if (location.pathname === "/beneficiary/") {
+            pathName = location.pathname.slice(0, -1);
+          }
+
+          return (
+            <li key={idx} className="relative text-lg">
+              <Link to={`${pathName}${formattedLink ? `/${formattedLink}` : ""}`}
+                className={` no-underline ${word === "home" ? 'text-white font-semibold' : 'text-white/80'} `}>
+                {section}
+              </Link>
+              <hr className={`absolute left-0 right-0 top-8 ${word === "home" ? 'bg-white h-1 border-0' : 'hidden'}`}></hr>
+            </li>
+          )
+        }
+        )}
+
+      </ul>
+      <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10" />
+
+      <Card className="p-5 h-screen">
+        <div className="flex flex-row justify-around">
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            className="mt-4 w-60"
           />
-        <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
-      </div>
-      
-      <div className="w-full grid grid-cols-2" >
+          <FilterBar setFilter={setSelectedFilter} className="mt-4" />
+        </div>
+        <div className="w-full grid grid-cols-2 mt-4" >
           {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
-            <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
+            <BeneficiaryPosting key={idx} beneficiaryPosting={post} />
           ))}
-      </div>
-        {/* <Button
-              variant="contained"
-              startIcon={<AddCircleOutline />}
-              style={{ height: "fit-content" }}
-              onClick={() => setIsAddModalOpen(true)}
-            > */}
-     
-        {/* <AddFoodPostingModal
-          donorId={baId}
-          isModalOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-        /> */}
-          
-     
+        </div>
+      </Card>
     </>
   );
 };

@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 import SearchBar from "../parts/components/SearchBar";
 import { Link } from "react-router-dom";
 import BeneficiaryPosting from "../parts/beneficiaries/BeneficiaryPosting";
+import Profile from "../parts/components/Profile";
 
 interface BaPageProps {
   baId: string;
@@ -151,10 +152,9 @@ const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
   return (
     <>
-      <Header title={`Food Hero`} />
-        <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
-            Welcome {baId}
-        </Typography>
+      <Header/>
+
+        <Profile name="Woodlands Community Center" imageUrl="/profile/woodlandsCC.jpg"/>
         
           <ul className="w-screen flex flex-row justify-around">
               {SECTIONS.map((section, idx) => {
@@ -162,8 +162,10 @@ const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
                 const formattedLink = word === "home" ? "/beneficiary" : ``;
 
                 return (
-                  <li key={idx} className="relative text-xl text-white">
-                  <Link to={formattedLink} className="text-white no-underline">
+                  <li key={idx} className="relative text-lg">
+                  <Link 
+                    to={formattedLink} 
+                    className={` no-underline ${word === "find-donations" ? 'text-white font-semibold': 'text-white/80'} `}>
                     {section}
                   </Link>
                   <hr className={`absolute left-0 right-0 top-8 ${word === "find-donations" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
@@ -173,20 +175,21 @@ const BADonations: React.FC<BaPageProps> = ({ baId }: BaPageProps) => {
 
           </ul>
         <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
-      
-      <div className="flex flex-row justify-around">
-        <SearchBar 
-          setSearchQuery={setSearchQuery} 
-          className="mt-4 w-60"
-          />
-        <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
-      </div>
-      
-      <div className="w-full grid grid-cols-2" >
-          {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
-            <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
-          ))}
-      </div>
+      <Card className="p-5 h-screen">
+        <div className="flex flex-row justify-around">
+          <SearchBar 
+            setSearchQuery={setSearchQuery} 
+            className="mt-4 w-60"
+            />
+          <FilterBar setFilter={setSelectedFilter} className="mt-4"/>
+        </div>
+              
+        <div className="w-full grid grid-cols-2 mt-4" >
+            {dataFiltered.map((post: BeneficiaryViewModel, idx: number) => (
+              <BeneficiaryPosting key={idx}  beneficiaryPosting={post} />
+            ))}
+        </div>
+      </Card>
         {/* <Button
               variant="contained"
               startIcon={<AddCircleOutline />}

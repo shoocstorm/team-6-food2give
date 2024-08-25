@@ -26,15 +26,17 @@ const AcceptOrderModal: React.FC<AcceptOrderModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 390,
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
+          py: 4,
+          px: 5,
           borderRadius: 2,
-          border: "1px solid #77dd77",
+          border: "1px solid #616161",
           maxHeight: "80vh",
           overflowY: "scroll",
         }}
+        
       >
         <AddFoodTNCForm
           prompts={ACCEPT_ORDER_PROMPTS}
