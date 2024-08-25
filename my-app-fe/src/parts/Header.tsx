@@ -81,9 +81,6 @@ const Header = () => {
           <ListItem button onClick={() => handleMenuItemClick('/storagevolunteer')}>
             <ListItemText primary="Storage Volunteer" />
           </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick('/organization')}>
-            <ListItemText primary="Organization" />
-          </ListItem>
           <ListItem button onClick={() => handleMenuItemClick("/donor")}>
             <ListItemText primary="Donors" />
           </ListItem>
