@@ -16,7 +16,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
   onClose,
   onAccept,
 }) => {
-  const {orderId, 
+  const {
+    orderId, 
     pickupInstructions, 
     timeToExpiry, 
     tripDuration, 

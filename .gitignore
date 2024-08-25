@@ -30,4 +30,7 @@ yarn-error.log*
 # MacOS specific
 .DS_Store
 
+# Python specific
+venv
+
 /**/*/*.pyc

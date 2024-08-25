@@ -15,6 +15,9 @@ import timezone from "dayjs/plugin/timezone";
 import Layout from "./layouts/Layout";
 import JoinPage from "./parts/register/JoinPage";
 import LoginPage from "./parts/register/LoginPage";
+import BAHomePage from "./pages/BAHomePage";
+import BADonations from "./pages/BADonationsPage";
+
 
 // extending the Palette interface to include a custom color green in the theme
 declare module "@mui/material/styles" {
@@ -117,6 +120,13 @@ function App() {
                   path="/volunteer"
                   element={<VolunteerPage volunteerId="Bob" />}
                 />
+                <Route
+                  path="/beneficiary"
+                  element={<BAHomePage baId="Woodlands Community Care Centre" />}
+                />
+                <Route path="beneficiary/find-donations" 
+                element={<BADonations  baId="Woodlands Community Care Centre" />} />
+
                 <Route path="/rewards" element={<RewardsPage />} />
                 <Route path="/help" element={<HelpPage />} />
                 <Route path="/join" element={<JoinPage />} />
