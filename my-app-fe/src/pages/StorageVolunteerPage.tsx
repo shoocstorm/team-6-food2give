@@ -11,6 +11,7 @@ interface InventoryItem {
     consumeBy: string;
     tags: string[];
     quantity: number;
+    image?: string;
 }
 
 interface BaItem extends InventoryItem {
@@ -22,33 +23,37 @@ const StorageVolunteerPage: React.FC = () => {
     const [flag, setFlag] = useState(true);
     const [inventoryDataList, setInventoryDataList] = useState<InventoryItem[]>([
         {
-            name: "Nasi Lemak",
+            name: "Mee Rubus",
             consumeBy: "2024-09-15",
             tags: ["Dairy", "Perishable", "Refrigerated"],
             quantity: 10,
+            image: "beneficiary/food_3.png",
         },
         {
-            name: "Eggs",
+            name: "Chicken Rice",
             consumeBy: "2024-09-10",
             tags: ["Protein", "Perishable", "Refrigerated"],
             quantity: 30,
+            image: "beneficiary/food_2.jpeg",
         },
         {
-            name: "Bread",
+            name: "Nasi Lemak",
             consumeBy: "2024-09-05",
             tags: ["Bakery", "Perishable"],
             quantity: 15,
+            image: "beneficiary/food_1.jpeg",
         }
     ]);
 
     const [baDataList, setBaDataList] = useState<BaItem[]>([
         {
-            name: "Nasi Lemak",
+            name: "Mee Rubus",
             location: "Social Bakery @ 97 Main St",
             distance: 0,
             consumeBy: "2024-09-04",
             tags: ["Bakery", "Perishable"],
             quantity: 15,
+            image: "beneficiary/food_3.png",
         },
         {
             name: "Chicken Rice",
@@ -57,14 +62,16 @@ const StorageVolunteerPage: React.FC = () => {
             consumeBy: "2024-09-15",
             tags: ["Dairy", "Perishable", "Refrigerated"],
             quantity: 10,
+            image: "beneficiary/food_2.jpeg",
         },
         {
-            name: "Eggs",
+            name: "Nasi Lemak",
             location: "EderFoods @ 96 Main St",
             distance: 150,
             consumeBy: "2024-09-10",
             tags: ["Protein", "Perishable", "Refrigerated"],
             quantity: 30,
+            image: "beneficiary/food_1.jpeg",
         }
     ]);
 
