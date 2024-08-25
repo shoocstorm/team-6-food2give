@@ -7,6 +7,7 @@ import JobPostingModal from '../parts/volunteers/JobPostingModal';
 import jobPosting, { emptyJobPosting } from '../interfaces/JobPosting';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Profile from '../parts/components/Profile';
 
 interface VolunteerPageProps {
   volunteerId: string;
@@ -147,9 +148,7 @@ const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : 
   return (
     <>
     <Header title={`Food Hero`} />
-    <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
-            Welcome {volunteerId}!
-        </Typography>
+    <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg"/>
     <>
           <ul className="w-screen flex flex-row justify-around">
               {SECTIONS.map((section, idx) => {
