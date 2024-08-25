@@ -8,6 +8,7 @@ export interface BeneficiaryOrderRequestCardProps {
   beneficiaryName: string;
   numOfMealsRequested: number;
   subtitles: string[];
+  accepted?: boolean;
 }
 
 const BeneficiaryOrderRequestCard: React.FC<
@@ -17,9 +18,10 @@ const BeneficiaryOrderRequestCard: React.FC<
   beneficiaryName,
   numOfMealsRequested,
   subtitles,
+  accepted = false,
 }: BeneficiaryOrderRequestCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const [acc, setAcc] = useState(accepted);
   return (
     <>
       <Card className="p-4 mb-2">
@@ -36,15 +38,17 @@ const BeneficiaryOrderRequestCard: React.FC<
           variant="outlined"
           className="!mt-2 w-full"
           onClick={() => setIsModalOpen(true)}
+          disabled={acc}
         >
-          Accept
+          {acc ? "Accepted" : "Accept"}
         </Button>
       </Card>
       <AcceptOrderModal
         isModalOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAccept={() => {
-          /* TODO */ setIsModalOpen(false);
+          setAcc(true);
+          setIsModalOpen(false);
         }}
       />
     </>

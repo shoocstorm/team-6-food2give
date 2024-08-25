@@ -21,7 +21,10 @@ const FoodPosting: React.FC<FoodPostingProps> = ({ foodPosting }) => {
 
   return (
     <>
-      <Card className="m-2"  sx={{ borderRadius: '5%', margin: 2 }}>
+      <Card
+        className="m-2"
+        sx={{ borderRadius: "5%", margin: 2, border: "1px solid #77dd77" }}
+      >
         <CardActionArea onClick={() => setIsModalOpen(true)}>
           <CardMedia
             component="img"
@@ -52,11 +55,10 @@ const FoodPosting: React.FC<FoodPostingProps> = ({ foodPosting }) => {
                 .format("DD/MM/YYYY HH:mm:ss [SGT]")}
             </Typography>
             <div className="text-left relative right-1 mt-2">
-            {tags.map((tag: string, idx: number) => (
-              <Chip key={idx} label={tag} sx={{ marginRight: "3px " }} />
-            ))}
+              {tags.map((tag: string, idx: number) => (
+                <Chip key={idx} label={tag} sx={{ marginRight: "3px " }} />
+              ))}
             </div>
-            
           </CardContent>
         </CardActionArea>
       </Card>
