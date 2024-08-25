@@ -109,16 +109,6 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
                 </Typography>
                 <Typography variant="body1">{pickupInstructions}</Typography>
               </Box>
-              <Divider sx={{ marginBottom: 2 }} />
-              <Box display="flex" alignItems="center">
-                <InfoIcon color="info" sx={{ marginRight: 1 }} />
-                <Box>
-                  <Typography variant="body1" fontWeight="bold">
-                    Pick up instructions
-                  </Typography>
-                  <Typography variant="body1">{pickupInstructions}</Typography>
-                </Box>
-              </Box>
             </Box>
           </Stack>
           {orderAssigned ? (
