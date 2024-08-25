@@ -132,7 +132,7 @@ const StorageVolunteerPage: React.FC = () => {
 
 
                 <Card className="p-5">
-                    <SearchBar setSearchQuery={() => { }} className=" w-full" />
+                    <SearchBar setSearchQuery={() => { }} className="w-full" />
 
                     <div className={`${flag ? '' : 'hidden'} md:px-48 mt-5 md:mt-16`}>
                         <div className="grid md:grid-cols-4 grid-cols-2">

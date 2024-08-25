@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Box, Container, Grid, Modal, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Container, Grid, Modal, Typography, Card } from '@mui/material';
 import Header from '../parts/Header'; // Import Header component
 import '../assets/css/home.css';
 import JobPosting from '../parts/volunteers/JobPosting';
@@ -7,6 +7,7 @@ import JobPostingModal from '../parts/volunteers/JobPostingModal';
 import jobPosting, { emptyJobPosting } from '../interfaces/JobPosting';
 import { Link } from 'react-router-dom';
 import Profile from '../parts/components/Profile';
+import SearchBar from "../parts/components/SearchBar";
 
 interface VolunteerPageProps {
   volunteerId: string;
@@ -88,7 +89,7 @@ const currentJobPosting = {
   previewImage: "/beneficiary/food_1.jpeg"
 }
 
-const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : VolunteerPageProps) => {
+const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId }: VolunteerPageProps) => {
   const [selectedJob, setSelectedJob] = useState<jobPosting>(emptyJobPosting())
   const [isOpen, setIsOpen] = useState(false)
   const [availableJobs, setAvailableJobs] = useState(availableJobPostings)
@@ -113,42 +114,44 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
 
   return (
     <>
-    <Header/>
-    <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg"/>
-    <>
-          <ul className="w-screen flex flex-row justify-around">
-              {SECTIONS.map((section, idx) => {
-                const word = section.toLowerCase().replaceAll(" ", "-");
-                const formattedLink = word === "currently-delivering" ? "" : section.toLowerCase().replaceAll(" ", "-");
+      <Header />
+      <Profile name="Anderson Lim" imageUrl="/profile/volunteerRider.jpg" />
 
-                return (
-                  <li key={idx} className="relative text-xl text-white">
-                  <Link to={formattedLink} className="text-white no-underline">
-                    {section}
-                  </Link>
-                  <hr className={`absolute left-0 right-0 top-8 ${word === "currently-delivering" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
-                </li>
-                )}
-              )}
-          </ul>
-        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
-      
-    </>
-    <div style={{margin: "40px 80px"}}>
-      <Container className="container-box" >
-      <Grid container spacing={3}>
-        { currentJob.orderAssigned ?
-        <Grid item xs={12} lg={4}>
-             <JobPosting jobPosting={currentJob} onClick={() => {
+      <>
+        <ul className="w-screen flex flex-row justify-around">
+          {SECTIONS.map((section, idx) => {
+            const word = section.toLowerCase().replaceAll(" ", "-");
+            const formattedLink = word === "currently-delivering" ? "" : section.toLowerCase().replaceAll(" ", "-");
+
+            return (
+              <li key={idx} className="relative text-xl text-white">
+                <Link to={formattedLink} className="text-white no-underline">
+                  {section}
+                </Link>
+                <hr className={`absolute left-0 right-0 top-8 ${word === "currently-delivering" ? 'bg-white h-1 border-0' : 'hidden'}`}></hr>
+              </li>
+            )
+          }
+          )}
+        </ul>
+        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10" />
+      </>
+
+      <Card className="p-5 h-screen">
+        <SearchBar setSearchQuery={() => { }} className="mt-4 w-full" />
+        {currentJob.orderAssigned ?
+        <div className="w-full grid grid-cols-2 mt-4" >
+            <JobPosting 
+              jobPosting={currentJob} 
+              onClick={() => {
               setIsOpen(true)
               setSelectedJob(currentJob)
-              }}/>
-          </Grid> :<Grid item lg={12}> <Box><Typography>No orders currently! Head to the "Orders to Fulfil" tab to get started!</Typography></Box>
+            }} />
+          </div> :
+          <Grid item lg={12}> <Box><Typography>No orders currently! Head to the "Orders to Fulfil" tab to get started!</Typography></Box>
           </Grid>}
-      </Grid>
-      </Container>
-      </div>
-      <JobPostingModal jobPosting={selectedJob} open={isOpen} onClose={() => setIsOpen(false)} onAccept={onAccept} onFinish={onFinish} onCancel={onFinish}/>
+      </Card>
+      <JobPostingModal jobPosting={selectedJob} open={isOpen} onClose={() => setIsOpen(false)} onAccept={onAccept} onFinish={onFinish} onCancel={onFinish} />
     </>
   );
 };

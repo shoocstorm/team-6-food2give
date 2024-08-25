@@ -7,10 +7,12 @@ import {
   Divider,
   Modal,
   Button,
+  IconButton,
 } from "@mui/material";
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import jobPosting from "../../interfaces/JobPosting";
+import { CloseOutlined } from "@mui/icons-material";
 
 interface JobPostingModalProps {
   jobPosting: jobPosting;
@@ -48,19 +50,26 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 500,
+          width: 400,
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
+          py: 4,
+          px: 5,
+          borderRadius: 10,
+          border: "1px solid #616161",
           maxHeight: "80vh",
           overflowY: "scroll",
         }}
       >
         <Stack spacing={2} style={{ padding: "15px" }}>
-          <Typography variant="h5" style={{ textAlign: "left" }}>
-            Order #{orderId}
-          </Typography>
+        <div className="flex flex-row justify-between items-center">
+            <Typography variant="h5" style={{ textAlign: "left" }}>
+              Order #{orderId}
+            </Typography>
+            <IconButton onClick={onClose}>
+              <CloseOutlined />
+            </IconButton>
+          </div>
           <CardMedia
             component="img"
             height="140"
@@ -118,6 +127,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
               size="large"
               onClick={onFinish}
               color="success"
+              sx={{ marginTop: "10px", color: 'white', backgroundColor: 'green.300'}}
+
             >
               Finish Order
             </Button>
