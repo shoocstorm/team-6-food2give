@@ -7,7 +7,23 @@ export default interface jobPosting {
   orderAssigned: boolean,
   numberOfMeals: number,
   pointsEarned: number,
-  tripDuration: number
-  pickupInstructions: string
+  tripDuration: number,
+  pickupInstructions: string,
   timeToExpiry: number
+  previewImage: string
 }
+
+export const emptyJobPosting = () => ({
+  orderId: "",
+  foodPostingId: "",
+  donorId: "",
+  donorLocation: "",
+  destinationId: "",
+  orderAssigned: false,
+  numberOfMeals: 0,
+  pointsEarned: 0,
+  tripDuration: 0,
+  pickupInstructions: "",
+  timeToExpiry: 0,
+  previewImage: "/beneficiary/food_1.jpeg"
+})

@@ -11,7 +11,7 @@ const JobPosting: React.FC<JobPostingProps> = ({
   jobPosting,
   onClick
 } : JobPostingProps) => {
-  const {orderId, tripDuration, numberOfMeals, pointsEarned} = jobPosting || {}
+  const {orderId, tripDuration, numberOfMeals, pointsEarned, previewImage} = jobPosting || {}
   return (
     <Card>
       <CardActionArea onClick={onClick}>
@@ -20,8 +20,9 @@ const JobPosting: React.FC<JobPostingProps> = ({
         <CardMedia
             component="img"
             height="140"
-            image="https://i.pinimg.com/564x/4e/89/61/4e896119923bb3b72823e5dc6657abb6.jpg"
+            image={previewImage}
             alt="Placeholder image"
+            sx={{ height: 200 }}
           />
         <Stack spacing={1} style={{textAlign: "left", margin: "10px"}}>
           <Box>
