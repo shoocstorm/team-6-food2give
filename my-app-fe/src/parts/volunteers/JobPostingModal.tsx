@@ -28,7 +28,8 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
     donorLocation,
     destinationId,
     numberOfMeals,
-    orderAssigned
+    orderAssigned,
+    previewImage
   } = jobPosting
   return (
     <Modal open={open} onClose={onClose} className="m-4 overflow-scroll">
@@ -50,8 +51,9 @@ const JobPostingModal: React.FC<JobPostingModalProps> = ({
             <CardMedia
                 component="img"
                 height="140"
-                image="https://i.pinimg.com/564x/4e/89/61/4e896119923bb3b72823e5dc6657abb6.jpg"
+                image={previewImage}
                 alt="Placeholder image"
+                sx={{ height: 300 }}
               />
             <Stack spacing={1} style={{textAlign: "left", margin: "10px"}}>
               <Box>

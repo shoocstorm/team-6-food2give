@@ -5,24 +5,25 @@ import '../assets/css/home.css';
 import JobPosting from '../parts/volunteers/JobPosting';
 import JobPostingModal from '../parts/volunteers/JobPostingModal';
 import jobPosting, { emptyJobPosting } from '../interfaces/JobPosting';
+import { Link } from 'react-router-dom';
 
 interface VolunteerPageProps {
   volunteerId: string;
 }
-
 const availableJobPostings = [
   {
-    orderId: "34",
-    foodPostingId: "123765",
-    donorId: "Swensens",
-    donorLocation: "Bishan Street 1",
-    destinationId: "Toa Payoh Lorong 6",
+    orderId: "78",
+    foodPostingId: "789345",
+    donorId: "Crave",
+    donorLocation: "Marsiling",
+    destinationId: "Woodlands Community Care Centre",
     orderAssigned: false,
-    numberOfMeals: 15,
-    pointsEarned: 20,
-    tripDuration: 35,
-    pickupInstructions: "Collect at the back of the restaurant",
-    timeToExpiry: 78
+    numberOfMeals: 20,
+    pointsEarned: 50,
+    tripDuration: 20,
+    pickupInstructions: "Collect at our counter",
+    timeToExpiry: 115,
+    previewImage: "/beneficiary/food_1.jpeg"
   },
   {
     orderId: "29",
@@ -35,7 +36,8 @@ const availableJobPostings = [
     pointsEarned: 55,
     tripDuration: 45,
     pickupInstructions: "Buy 3 steaks and get the order from us",
-    timeToExpiry: 91
+    timeToExpiry: 91,
+    previewImage: "/beneficiary/food_2.jpeg"
   },
   {
     orderId: "98",
@@ -48,7 +50,8 @@ const availableJobPostings = [
     pointsEarned: 12,
     tripDuration: 22,
     pickupInstructions: "Help us make the market and we'll give you the food",
-    timeToExpiry: 91
+    timeToExpiry: 91,
+    previewImage: "/beneficiary/food_3.png"
   },
   {
     orderId: "78",
@@ -61,13 +64,29 @@ const availableJobPostings = [
     pointsEarned: 50,
     tripDuration: 20,
     pickupInstructions: "Collect at counter",
-    timeToExpiry: 115
+    timeToExpiry: 115,
+    previewImage: "/beneficiary/food_4.jpeg"
   }
 ]
 
-const currentJobPosting = emptyJobPosting()
+const SECTIONS = ["Currently Delivering", "Orders to Fulfil"]
 
-const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : VolunteerPageProps) => {
+const currentJobPosting = {
+  orderId: "78",
+  foodPostingId: "789345",
+  donorId: "Crave",
+  donorLocation: "Marsiling",
+  destinationId: "Woodlands Community Care Centre",
+  orderAssigned: true,
+  numberOfMeals: 20,
+  pointsEarned: 50,
+  tripDuration: 20,
+  pickupInstructions: "Collect at our counter",
+  timeToExpiry: 115,
+  previewImage: "/beneficiary/food_1.jpeg"
+}
+
+const VolunteerAllOrdersPage: React.FC<VolunteerPageProps> = ({ volunteerId } : VolunteerPageProps) => {
   const [selectedJob, setSelectedJob] = useState<jobPosting>(emptyJobPosting())
   const [isOpen, setIsOpen] = useState(false)
   const [availableJobs, setAvailableJobs] = useState(availableJobPostings)
@@ -92,23 +111,32 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
 
   return (
     <>
-    <Header title={`Welcome, ${volunteerId}!`} />
+    <Header title={`Food Hero`} />
+    <Typography variant="h5" fontWeight="semibold" align="left" className="p-4">
+            Welcome {volunteerId}!
+        </Typography>
+    <>
+          <ul className="w-screen flex flex-row justify-around">
+              {SECTIONS.map((section, idx) => {
+                const word = section.toLowerCase().replaceAll(" ", "-");
+                const formattedLink = word === "currently-delivering" ? "/volunteer" : ``;
+
+                return (
+                  <li key={idx} className="relative text-xl text-white">
+                  <Link to={formattedLink} className="text-white no-underline">
+                    {section}
+                  </Link>
+                  <hr className={`absolute left-0 right-0 top-8 ${word === "orders-to-fulfil" ? 'bg-white h-1 border-0': 'hidden'}`}></hr>
+                </li>
+                )}
+              )}
+          </ul>
+        <div className="w-full border-t border-2 relative top-1 bg-slate-800 border-b border-white border-opacity-10"/>
+      
+    </>
     <div style={{margin: "40px 80px"}}>
       <Container className="container-box" >
       <Grid container spacing={3}>
-      <Grid item lg={12}>
-          <Typography style={{textAlign: "left"}} variant="h4">Currently Delivering</Typography>
-        </Grid>
-        { currentJob.orderAssigned ?
-        <Grid item xs={12} lg={4}>
-             <JobPosting jobPosting={currentJob} onClick={() => {
-              setIsOpen(true)
-              setSelectedJob(currentJob)
-              }}/>
-          </Grid> : null}
-        <Grid item lg={12}>
-          <Typography style={{textAlign: "left"}} variant="h4">Available Orders</Typography>
-        </Grid>
         {availableJobs.map(posting => (
           <>
           <Grid item xs={12} lg={4}>
@@ -127,4 +155,4 @@ const VolunteerPage: React.FC<VolunteerPageProps> = ({ volunteerId } : Volunteer
   );
 };
 
-export default VolunteerPage;
+export default VolunteerAllOrdersPage;

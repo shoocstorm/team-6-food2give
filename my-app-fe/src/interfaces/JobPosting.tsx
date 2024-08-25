@@ -10,6 +10,7 @@ export default interface jobPosting {
   tripDuration: number,
   pickupInstructions: string,
   timeToExpiry: number
+  previewImage: string
 }
 
 export const emptyJobPosting = () => ({
@@ -23,5 +24,6 @@ export const emptyJobPosting = () => ({
   pointsEarned: 0,
   tripDuration: 0,
   pickupInstructions: "",
-  timeToExpiry: 0
+  timeToExpiry: 0,
+  previewImage: "/beneficiary/food_1.jpeg"
 })
