@@ -3,6 +3,7 @@ Telegram bot : t.me/foodheroms_bot
 # FRONTEND
 
 ```
+set REACT_APP_SERVER_URL=http://localhost:5001 # url of backend service
 cd my-app-fe
 npm install
 npm start

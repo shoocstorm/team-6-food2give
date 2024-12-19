@@ -48,8 +48,8 @@ cred = credentials.Certificate('settings.json')
 # Initialize the app with a service account, granting admin privileges
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'ms-cfg.appspot.com',
-    'databaseURL': os.getenv("DATABASE_URL")
-   
+    'databaseURL': os.getenv("DATABASE_URL"),
+    #'storageBucket': "food-hero-8dd9e.firebasestorage.app"
 })
 bucket = storage.bucket()
 
@@ -396,6 +396,7 @@ def get_orders():
 @server.route('/login', methods=['POST'])
 def login_user():
     try:
+        print("Begin login")
         data = request.get_json()
         email = data.get('email')
         password = data.get('password')

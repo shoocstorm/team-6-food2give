@@ -13,7 +13,7 @@ yarn-error.log*
 
 # Ignore environment files
 .venv/
-.env
+#.env
 .env.*
 /my-app-fe/.env.local
 /my-app-be/.env.local
@@ -22,7 +22,7 @@ yarn-error.log*
 # Ignore build folders
 /my-app-fe/build/
 /my-app-be/build/
-/my-app-be/settings.json
+#/my-app-be/settings.json
 # Ignore testing coverage
 /my-app-fe/coverage/
 /my-app-be/coverage/

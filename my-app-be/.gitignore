@@ -1,6 +1,6 @@
 settings.json
 
 testenv/
-/settings.json
+#/settings.json
 
-.env
+#.env
