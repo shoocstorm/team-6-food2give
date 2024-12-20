@@ -47,9 +47,9 @@ cred = credentials.Certificate('settings.json')
 
 # Initialize the app with a service account, granting admin privileges
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'ms-cfg.appspot.com',
+    #'storageBucket': 'ms-cfg.appspot.com',
     'databaseURL': os.getenv("DATABASE_URL"),
-    #'storageBucket': "food-hero-8dd9e.firebasestorage.app"
+    'storageBucket': "food-hero-8dd9e.firebasestorage.app" # used for store images donor uploaded
 })
 bucket = storage.bucket()
 
